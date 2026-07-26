@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Honolulu B Color Match — Ohuhu 320 Marker Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F4EE;
+    --card:#FFFFFF;
+    --ink:#201F1D;
+    --ink-soft:#6B655A;
+    --line:#DDD6C6;
+    --teal:#1DB7B7;
+    --teal-ink:#0D6E6E;
+    --blush:#FF6565;
+    --blush-ink:#B23636;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+  header.hero{padding:56px 0 0;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal-ink);
+    font-weight:600;
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(32px,5vw,46px);
+    line-height:1.08;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic;font-weight:500;color:var(--teal-ink);}
+  .lede{
+    font-size:16px;
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin:0 0 32px;
+  }
+
+  /* signature element: the marker-cap spectrum strip */
+  .strip{
+    display:flex;
+    width:100%;
+    height:26px;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 1px 0 rgba(0,0,0,0.05) inset;
+    margin-bottom:8px;
+  }
+  .strip span{flex:1 0 auto;}
+  .strip-caption{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+    margin:0 0 44px;
+  }
+
+  main{padding-bottom:80px;}
+
+  .tool{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px;
+    box-shadow:0 1px 2px rgba(32,31,29,0.04);
+  }
+  form{display:flex;gap:10px;flex-wrap:wrap;}
+  .field{flex:1 1 220px;display:flex;flex-direction:column;gap:6px;}
+  label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  input[type="text"]{
+    font-family:'JetBrains Mono',monospace;
+    font-size:16px;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--paper);
+    color:var(--ink);
+    outline-offset:2px;
+  }
+  input[type="text"]:focus-visible{outline:2px solid var(--teal);border-color:var(--teal);}
+  button.primary{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    background:var(--ink);
+    color:var(--paper);
+    cursor:pointer;
+    align-self:flex-end;
+  }
+  button.primary:hover{background:var(--teal-ink);}
+  button.primary:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  .error-text{
+    color:var(--blush-ink);
+    font-size:13px;
+    min-height:18px;
+    margin:8px 2px 0;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:18px 0 16px;
+    color:var(--ink-soft);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .divider::before, .divider::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .visually-hidden{
+    position:absolute;
+    width:1px;height:1px;
+    padding:0;margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+  .secondary-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:11px 20px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .secondary-btn:hover{border-color:var(--teal);color:var(--teal-ink);}
+  .secondary-btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+
+  .photo-stage{margin-top:16px;}
+  #photoCanvas{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    border-radius:10px;
+    border:1px solid var(--line);
+    cursor:crosshair;
+    background:var(--paper);
+  }
+  .photo-controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:10px;
+  }
+  .photo-hint{margin:0;font-size:13px;color:var(--ink-soft);}
+  .hover-preview{
+    display:flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .hover-preview .chip.small{border:1px solid var(--line);background:var(--paper);}
+  .text-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:0;
+  }
+  .text-btn:hover{color:var(--blush-ink);}
+
+  #result{margin-top:8px;}
+  .result-card{
+    margin-top:18px;
+    padding:20px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .result-card.found{border-color:var(--teal);background:#F1FBFB;}
+  .result-card.missing{border-color:var(--blush);background:#FFF4F3;}
+  .result-tag{
+    margin:0;
+    font-weight:600;
+    font-size:14px;
+  }
+  .result-card.found .result-tag{color:var(--teal-ink);}
+  .result-card.missing .result-tag{color:var(--blush-ink);}
+
+  .closest-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .chip-arrow{color:var(--ink-soft);font-size:18px;}
+  .chip{
+    width:52px;height:52px;border-radius:10px;flex-shrink:0;
+    border:1px solid rgba(0,0,0,0.08);
+  }
+  .chip.small{width:26px;height:26px;border-radius:6px;}
+  .result-text{display:flex;flex-direction:column;gap:2px;}
+  .result-name{margin:0;font-weight:600;font-size:16px;}
+  .result-hex{
+    margin:0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--ink-soft);
+    display:flex;align-items:center;gap:8px;
+  }
+  .result-family, .result-de{margin:0;font-size:13px;color:var(--ink-soft);}
+  .copy-btn{
+    font-family:'Inter',sans-serif;
+    font-size:11px;
+    font-weight:600;
+    padding:3px 9px;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .copy-btn:hover{border-color:var(--teal);color:var(--teal-ink);}
+
+  .alternates{display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px dashed var(--line);}
+  .alt-chip-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+  .alt-de{color:var(--ink-soft);font-family:'JetBrains Mono',monospace;font-size:12px;margin-left:4px;}
+
+  .method-note{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:14px 2px 0;
+  }
+
+  /* photo color picker */
+  .photo-tool{margin-top:16px;}
+  .tool-label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin:0 0 4px;
+  }
+  .tool-copy{font-size:13px;color:var(--ink-soft);margin:0 0 14px;}
+  .drop-zone{
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    padding:32px 20px;
+    text-align:center;
+    cursor:pointer;
+    background:var(--paper);
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+  .drop-zone:hover, .drop-zone.dragover{border-color:var(--teal);color:var(--teal-ink);background:#F1FBFB;}
+  .drop-zone:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  .picker-wrap{position:relative;}
+  #imageCanvas{
+    display:block;
+    max-width:100%;
+    height:auto;
+    border-radius:10px;
+    border:1px solid var(--line);
+    cursor:crosshair;
+    touch-action:none;
+  }
+  .picker-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+  .remove-btn{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    background:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:5px 10px;
+    cursor:pointer;
+  }
+  .remove-btn:hover{border-color:var(--blush);color:var(--blush-ink);}
+  .picker-hint{font-size:13px;color:var(--ink-soft);margin:10px 2px 0;min-height:18px;}
+  .magnifier{
+    position:fixed;
+    width:120px;height:120px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid var(--card);
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+    pointer-events:none;
+    z-index:20;
+  }
+  .magnifier canvas{display:block;image-rendering:pixelated;}
+  .mag-crosshair{
+    position:absolute;
+    top:50%;left:50%;
+    width:10px;height:10px;
+    transform:translate(-50%,-50%);
+    border:1.5px solid #fff;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.5);
+    pointer-events:none;
+  }
+
+  /* browse section */
+  .browse{margin-top:56px;}
+  .browse h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:24px;
+    margin:0 0 4px;
+  }
+  .browse p.sub{color:var(--ink-soft);font-size:14px;margin:0 0 20px;}
+
+  .family{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--card);}
+  .family-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:14px 18px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    text-align:left;
+  }
+  .family-header:focus-visible{outline:2px solid var(--teal);outline-offset:-2px;}
+  .family-title{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:var(--ink);}
+  .family-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+  .family-count{font-size:12px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;}
+  .caret{transition:transform 0.18s ease;color:var(--ink-soft);}
+  .family.open .caret{transform:rotate(180deg);}
+  .family-content{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    gap:8px;
+    padding:0 16px 16px;
+    max-height:0;
+    overflow:hidden;
+  }
+  .family.open .family-content{max-height:none;}
+  .family:not(.open) .family-content{display:none;}
+
+  .browse-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--paper);
+    cursor:pointer;
+    text-align:left;
+    font-family:'Inter',sans-serif;
+  }
+  .browse-chip:hover{border-color:var(--teal);}
+  .browse-chip:focus-visible{outline:2px solid var(--teal);outline-offset:1px;}
+  .chip-fill{width:24px;height:24px;border-radius:6px;flex-shrink:0;border:1px solid rgba(0,0,0,0.08);}
+  .chip-label{display:flex;flex-direction:column;line-height:1.25;overflow:hidden;}
+  .chip-label b{font-size:11.5px;font-family:'JetBrains Mono',monospace;}
+  .chip-label span{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  footer{padding:0 0 60px;color:var(--ink-soft);font-size:12px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Ohuhu Honolulu B · 320 marker set</p>
+    <h1>Do I already own <em>this</em> color?</h1>
+    <p class="lede">Paste a hex code and this checks it against all 200 markers in the Honolulu B set. If it's not one you own, it finds the closest one on your desk.</p>
+    <div class="strip" id="strip" aria-hidden="true"></div>
+    <p class="strip-caption">All 200 markers in the set, in catalog order</p>
+  </header>
+
+  <main>
+    <div class="tool">
+      <form id="checkForm">
+        <div class="field">
+          <label for="hexInput">Hex code</label>
+          <input type="text" id="hexInput" placeholder="#3E8969 or 3e8969" autocomplete="off" spellcheck="false">
+        </div>
+        <button type="submit" class="primary">Check color</button>
+      </form>
+      <p class="error-text" id="inputError"></p>
+      <div id="result"></div>
+      <p class="method-note">Closest match is measured as Delta-E (CIE76) in Lab color space — this tracks how a human eye perceives color difference more closely than comparing raw RGB or hex values.</p>
+    </div>
+
+    <div class="tool photo-tool">
+      <p class="tool-label">Match from a photo</p>
+      <p class="tool-copy">Upload a photo showing a color, then click on it to sample that exact pixel. It's matched the same way as a typed hex code.</p>
+      <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Upload a photo">
+        <input type="file" id="imageInput" accept="image/*" hidden>
+        <p id="dropText">Click to choose a photo, or drag one here</p>
+      </div>
+      <div class="picker-wrap" id="pickerWrap" hidden>
+        <canvas id="imageCanvas"></canvas>
+        <div class="picker-actions">
+          <span></span>
+          <button type="button" class="remove-btn" id="removeImageBtn">✕ Remove photo</button>
+        </div>
+      </div>
+      <p class="picker-hint" id="pickerHint"></p>
+      <div class="magnifier" id="magnifier" hidden>
+        <canvas id="magCanvas" width="120" height="120"></canvas>
+        <div class="mag-crosshair"></div>
+      </div>
+    </div>
+
+    <section class="browse">
+      <h2>Browse the full set</h2>
+      <p class="sub">All 200 colors, grouped the way Ohuhu groups them. Tap any swatch to check it.</p>
+      <div id="families"></div>
+    </section>
+  </main>
+
+  <footer>
+    Reference data transcribed from the Ohuhu Honolulu B (320 Set) color guide, 7 pages, 200 entries.
+  </footer>
+</div>
+
+<script>
+// ---- Data: [code, name, hex, family] ----
+const RAW = [
+["R012","Fruit Punch","#e66661","Red, Pink & Magenta"],
+["R14","Sheer Peach","#f9bdb6","Red, Pink & Magenta"],
+["R15","Lychee Juice","#f9bfbb","Red, Pink & Magenta"],
+["R16","Light Salmon","#f9c3c2","Red, Pink & Magenta"],
+["R26","Valentine Pink","#eea0b8","Red, Pink & Magenta"],
+["R27","Pink Satin","#e690ab","Red, Pink & Magenta"],
+["R28","Pink Carnation","#ff7e9e","Red, Pink & Magenta"],
+["R46","Old Rose","#da8992","Red, Pink & Magenta"],
+["R54","Lavender Fog","#dfc2ce","Red, Pink & Magenta"],
+["R59","Wine Berry","#9c5e73","Red, Pink & Magenta"],
+["R112","Reddish Pink","#eb6f77","Red, Pink & Magenta"],
+["R210","Deep Blush","#ff6565","Red, Pink & Magenta"],
+["R213","Pomegranate","#b9576d","Red, Pink & Magenta"],
+["R215","Morello Cherry","#a4000a","Red, Pink & Magenta"],
+["R312","Magenta","#bd5d7b","Red, Pink & Magenta"],
+["R410","Raspberry","#d96b7b","Red, Pink & Magenta"],
+["R513","Deep Wine","#925b68","Red, Pink & Magenta"],
+["R612","Raisin","#81636e","Red, Pink & Magenta"],
+["RV01","Water Lily","#fcf2f7","Red, Pink & Magenta"],
+["RV02","Pale Pink Rose","#fce6f0","Red, Pink & Magenta"],
+["RV04","Light Orchid","#f3bfd8","Red, Pink & Magenta"],
+["RV05","Pink Pearl","#f8b9d4","Red, Pink & Magenta"],
+["RV17","Pink","#f6a6bd","Red, Pink & Magenta"],
+["RV18","Sheer Peach","#f498b8","Red, Pink & Magenta"],
+["RV19","Dahlia Pink","#f38ebb","Red, Pink & Magenta"],
+["RV23","Pink Wisp","#f8d7e7","Red, Pink & Magenta"],
+["RV25","Rosy Lilac","#ecb3d2","Red, Pink & Magenta"],
+["RV39","Bright Fuchsia","#c776af","Red, Pink & Magenta"],
+["RV57","Dark Lilac","#d0a7ce","Red, Pink & Magenta"],
+["RV212","Rich Raspberry","#f5229b","Red, Pink & Magenta"],
+["RV515","Ripe Mulberry","#895a7d","Red, Pink & Magenta"],
+["FY01","Fluorescent Orange","#ff8a28","Red, Pink & Magenta"],
+["FY02","Fluorescent Red","#ff5972","Red, Pink & Magenta"],
+
+["Y02","Lemon Chiffon","#f4eebb","Yellow, Orange & Peach"],
+["Y03","Pastel Yellow","#f5f3c4","Yellow, Orange & Peach"],
+["Y09","Summer Lemon","#e9cf78","Yellow, Orange & Peach"],
+["Y34","Eggnog Yellow","#fbf1d9","Yellow, Orange & Peach"],
+["Y42","Warm Ivory","#fae0c5","Yellow, Orange & Peach"],
+["Y43","Warm Beige","#f7ddc0","Yellow, Orange & Peach"],
+["Y46","Peach Yogurt","#f4b684","Yellow, Orange & Peach"],
+["Y49","Autumn Leaf","#ecb071","Yellow, Orange & Peach"],
+["Y55","Golden Champagne","#fddfbe","Yellow, Orange & Peach"],
+["Y59","Marigold Yellow","#e7b781","Yellow, Orange & Peach"],
+["Y62","Sandy Beige","#f7e5d3","Yellow, Orange & Peach"],
+["Y69","Milk Tea","#e0c3a6","Yellow, Orange & Peach"],
+["Y111","Mustard","#f0af42","Yellow, Orange & Peach"],
+["Y213","Dark Marigold","#e49c01","Yellow, Orange & Peach"],
+["Y215","Toffee","#d18850","Yellow, Orange & Peach"],
+["Y311","Termite Beige","#d4ac75","Yellow, Orange & Peach"],
+["Y315","Olive Yellow","#bd9057","Yellow, Orange & Peach"],
+["Y410","Goldenrod","#ecaf73","Yellow, Orange & Peach"],
+["Y412","Apple Cider","#e4a884","Yellow, Orange & Peach"],
+["Y413","Fawn","#d2a17f","Yellow, Orange & Peach"],
+["Y415","Sand Storm","#c89367","Yellow, Orange & Peach"],
+["Y416","Golden Brown","#ad7957","Yellow, Orange & Peach"],
+["Y515","Light Walnut","#b48670","Yellow, Orange & Peach"],
+["YR00","Barely Blush","#ffe1d3","Yellow, Orange & Peach"],
+["YR01","Milk White","#faecdb","Yellow, Orange & Peach"],
+["YR02","Peach Silk","#fee7d6","Yellow, Orange & Peach"],
+["YR04","Pastel Peach","#fae1d0","Yellow, Orange & Peach"],
+["YR05","Cotton Pearl","#ffd1b8","Yellow, Orange & Peach"],
+["YR06","Raw Cashew","#fbd2bc","Yellow, Orange & Peach"],
+["YR09","Sandstone","#f9a375","Yellow, Orange & Peach"],
+["YR014","Deep Vermilion","#df3e35","Yellow, Orange & Peach"],
+["YR015","Burnt Orange","#db8057","Yellow, Orange & Peach"],
+["YR17","Sunset Orange","#fab58a","Yellow, Orange & Peach"],
+["YR19","Marigold Orange","#f8ad66","Yellow, Orange & Peach"],
+["YR33","Rose Cream","#fadacb","Yellow, Orange & Peach"],
+["YR34","Peach Cream","#fac7b9","Yellow, Orange & Peach"],
+["YR37","Roasted Cashew","#f1b28d","Yellow, Orange & Peach"],
+["YR38","Burnt Ochre","#e5a484","Yellow, Orange & Peach"],
+["YR45","Rosewater","#ffd0c5","Yellow, Orange & Peach"],
+["YR47","Dusty Peach","#f7c4b9","Yellow, Orange & Peach"],
+["YR52","Cameo Rose","#fae0d7","Yellow, Orange & Peach"],
+["YR55","Pink Lemonade","#f2c5bb","Yellow, Orange & Peach"],
+["YR56","Light Apricot Pink","#f6c8bc","Yellow, Orange & Peach"],
+["YR57","Tropical Peach","#ee8354","Yellow, Orange & Peach"],
+["YR58","Pink Sand","#fabdb2","Yellow, Orange & Peach"],
+["YR59","Cantaloupe","#f9af9c","Yellow, Orange & Peach"],
+["YR111","Persimmon","#f68b50","Yellow, Orange & Peach"],
+["YR112","Orange","#ff8a28","Yellow, Orange & Peach"],
+["YR213","Squash Orange","#e97d60","Yellow, Orange & Peach"],
+["YR313","Potato Brown","#a6552a","Yellow, Orange & Peach"],
+["YR314","Sandalwood","#a97461","Yellow, Orange & Peach"],
+["YR515","Burnt Sienna","#c97765","Yellow, Orange & Peach"],
+
+["E06","Bog Mist Green","#d5d0bd","Earth & Brown"],
+["E14","Khaki Beige","#d5caba","Earth & Brown"],
+["E22","Lime Juice","#f0e3c3","Earth & Brown"],
+["E44","Soft Sand","#f6d3b4","Earth & Brown"],
+["E47","Camel","#dcb092","Earth & Brown"],
+["E49","Honey Brown","#d7a792","Earth & Brown"],
+["E58","Fawn Brown","#c39886","Earth & Brown"],
+["E66","Light Fawn","#c8a092","Earth & Brown"],
+["E69","Russet Brown","#b27a6f","Earth & Brown"],
+["E81","Spanish Pink","#f6d5d2","Earth & Brown"],
+["E92","Ash Rose","#ddccc6","Earth & Brown"],
+["E97","Deep Rose Grey","#bca09b","Earth & Brown"],
+["E111","Pewter Green","#b5a696","Earth & Brown"],
+["E211","Light Elm Wood","#cfb38c","Earth & Brown"],
+["E212","Dusty Olive","#baa67d","Earth & Brown"],
+["E311","Sandbar Brown","#af9e89","Earth & Brown"],
+["E313","Swamp Mud","#8d7a67","Earth & Brown"],
+["E314","Military Olive","#78685e","Earth & Brown"],
+["E415","Cedar Brown","#704123","Earth & Brown"],
+["E513","Taupe Brown","#82726e","Earth & Brown"],
+["E515","Black Brown","#635756","Earth & Brown"],
+["E610","Light Mahogany","#a14b23","Earth & Brown"],
+["E614","Maple Syrup","#8d6660","Earth & Brown"],
+["E615","Cherry Cola","#7c564f","Earth & Brown"],
+["E711","Old Mahogany","#a87e7a","Earth & Brown"],
+["E713","Red Bean","#976368","Earth & Brown"],
+["E814","Caput Mortuum","#826b6c","Earth & Brown"],
+["E914","Bark Brown","#815867","Earth & Brown"],
+
+["G012","Mineral Green","#9abeb6","Green & Yellow-Green"],
+["G36","Glass Green","#9adea3","Green & Yellow-Green"],
+["G43","Vintage Pale Green","#d6e6cc","Green & Yellow-Green"],
+["G47","Spring Green","#a4d49a","Green & Yellow-Green"],
+["G112","Pale Cobalt Green","#8fb7ab","Green & Yellow-Green"],
+["G113","Dusty Jade Green","#71a798","Green & Yellow-Green"],
+["G114","Aged Pine Green","#689886","Green & Yellow-Green"],
+["G312","Emerald Green","#13904d","Green & Yellow-Green"],
+["G313","Green","#3e8969","Green & Yellow-Green"],
+["G315","Dark Emerald","#004626","Green & Yellow-Green"],
+["G316","Deep Jade Green","#44756b","Green & Yellow-Green"],
+["YG015","Dark Olive","#88895d","Green & Yellow-Green"],
+["YG215","Thatch Green","#8d8670","Green & Yellow-Green"],
+["YG414","Dark Fern Green","#6f8d70","Green & Yellow-Green"],
+["YG510","Bud Green","#9bcd24","Green & Yellow-Green"],
+["YGY02","Abalone Grey","#e2dad4","Green & Yellow-Green"],
+["YGY11","Collingwood Grey","#d5d2c8","Green & Yellow-Green"],
+["YGY13","Oyster Grey","#d5d2c8","Green & Yellow-Green"],
+["YGY17","Platinum Grey","#bcb1ab","Green & Yellow-Green"],
+
+["B02","Light Minty Blue","#bee5e8","Blue, Teal & Blue-Violet"],
+["B03","Frost","#bedbe5","Blue, Teal & Blue-Violet"],
+["B04","Pale Cyan","#b3dbe5","Blue, Teal & Blue-Violet"],
+["B05","Robin Egg Blue","#a6d9e7","Blue, Teal & Blue-Violet"],
+["B08","Cotton Candy Blue","#82dcfa","Blue, Teal & Blue-Violet"],
+["B21","Porcelain Blue","#e2eff4","Blue, Teal & Blue-Violet"],
+["B27","Fog Blue","#bcd1e0","Blue, Teal & Blue-Violet"],
+["B28","Smoke Blue","#a4cce1","Blue, Teal & Blue-Violet"],
+["B015","Celadon Blue","#2580a7","Blue, Teal & Blue-Violet"],
+["B115","Classic Blue","#005297","Blue, Teal & Blue-Violet"],
+["B310","Blue Dusk","#a6c1cc","Blue, Teal & Blue-Violet"],
+["B315","Deep Cerulean","#457393","Blue, Teal & Blue-Violet"],
+["BG05","Light Sea Blue","#9dd9dc","Blue, Teal & Blue-Violet"],
+["BG09","Aquamarine","#83cfce","Blue, Teal & Blue-Violet"],
+["BG19","Sea Blue","#86d0d0","Blue, Teal & Blue-Violet"],
+["BG24","Sea Glass Blue","#bde1cd","Blue, Teal & Blue-Violet"],
+["BG011","Teal","#1db7b7","Blue, Teal & Blue-Violet"],
+["BG21","Mint Whisp","#e2f1e7","Blue, Teal & Blue-Violet"],
+["BG114","Faded Teal","#409bae","Blue, Teal & Blue-Violet"],
+["BG215","Dark Pine Green","#2d9581","Blue, Teal & Blue-Violet"],
+["BG310","Seafoam Green","#a6dbd2","Blue, Teal & Blue-Violet"],
+["BG311","Turquoise","#68d0b7","Blue, Teal & Blue-Violet"],
+["BG314","Peacock Green","#2b948e","Blue, Teal & Blue-Violet"],
+["BG315","Castleton Green","#408982","Blue, Teal & Blue-Violet"],
+["BGY02","Pigeon Grey","#b0bec3","Blue, Teal & Blue-Violet"],
+["BGY18","Graphite Grey","#757c80","Blue, Teal & Blue-Violet"],
+["BGY24","Storm Grey","#75828c","Blue, Teal & Blue-Violet"],
+["BGY38","Charcoal Grey","#55575d","Blue, Teal & Blue-Violet"],
+["BV05","Cornflower","#9bc0e6","Blue, Teal & Blue-Violet"],
+["BV15","Dusty Periwinkle","#b8c1d8","Blue, Teal & Blue-Violet"],
+["BV18","Hydrangea Blue","#a0a7d0","Blue, Teal & Blue-Violet"],
+["BV31","Cloud Blue","#e0eef4","Blue, Teal & Blue-Violet"],
+["BV32","Pale Sky Blue","#d5e9f2","Blue, Teal & Blue-Violet"],
+["BV39","Pale Cerulean Blue","#6596cc","Blue, Teal & Blue-Violet"],
+["BV48","Distressed Denim","#97b4cf","Blue, Teal & Blue-Violet"],
+["BV115","Shadow Blue","#737698","Blue, Teal & Blue-Violet"],
+["BV310","Brilliant Blue","#264fb3","Blue, Teal & Blue-Violet"],
+["BV314","Lapis Lazuli","#5176a7","Blue, Teal & Blue-Violet"],
+["BV315","Cobalt Blue","#43719b","Blue, Teal & Blue-Violet"],
+["BV415","Antwerp","#4d88a9","Blue, Teal & Blue-Violet"],
+["BV514","Vintage Navy","#59739b","Blue, Teal & Blue-Violet"],
+["BV515","Navy","#546890","Blue, Teal & Blue-Violet"],
+
+["V08","Light Violet","#a68ac0","Violet & Purple"],
+["V10","Faded Violet","#a76ab7","Violet & Purple"],
+["V14","Pale Purple","#cbb3d6","Violet & Purple"],
+["V29","Dull Violet","#9186b5","Violet & Purple"],
+["V34","Periwinkle","#d4d5eb","Violet & Purple"],
+["V46","Lavender","#aaa2d0","Violet & Purple"],
+["V216","Morning Glory","#625ba8","Violet & Purple"],
+["V412","Lobelia","#988dc4","Violet & Purple"],
+["V414","Electric Indigo","#6d6aa8","Violet & Purple"],
+["V416","Deep Purple","#290069","Violet & Purple"],
+
+["120","Black","#000000","Cool, Warm & Neutral Greys"],
+["CG01","Cloud Grey","#eaeaeb","Cool, Warm & Neutral Greys"],
+["CG24","Grey","#b2b8bb","Cool, Warm & Neutral Greys"],
+["GG03","Silver Cloud","#ccdbd8","Cool, Warm & Neutral Greys"],
+["GG05","Evergreen Fog","#96a9a8","Cool, Warm & Neutral Greys"],
+["GG07","Steel Grey","#868a8d","Cool, Warm & Neutral Greys"],
+["GG10","Soft Cool Grey","#ced0d2","Cool, Warm & Neutral Greys"],
+["GG11","Fog Grey","#b5b9be","Cool, Warm & Neutral Greys"],
+["GG15","Dark Neutral Grey","#656970","Cool, Warm & Neutral Greys"],
+["WG04","Icy Lavender","#d2ccd1","Cool, Warm & Neutral Greys"],
+["WG06","Star Dust","#aca4ad","Cool, Warm & Neutral Greys"],
+["WG08","Heathered Grape","#af878f","Cool, Warm & Neutral Greys"],
+["WG10","Porcelain","#efedef","Cool, Warm & Neutral Greys"],
+["WG26","Silver Grey","#b7b061","Cool, Warm & Neutral Greys"],
+["WG37","Dark Charcoal","#676467","Cool, Warm & Neutral Greys"],
+["WG38","Caviar","#56585b","Cool, Warm & Neutral Greys"]
+];
+
+const FAMILIES = ["Red, Pink & Magenta","Yellow, Orange & Peach","Earth & Brown","Green & Yellow-Green","Blue, Teal & Blue-Violet","Violet & Purple","Cool, Warm & Neutral Greys"];
+
+// ---- Color math ----
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  return { r: parseInt(h.substring(0,2),16), g: parseInt(h.substring(2,4),16), b: parseInt(h.substring(4,6),16) };
+}
+function rgbToXyz(r,g,b){
+  const [rl,gl,bl] = [r,g,b].map(v=>{
+    v/=255;
+    return v>0.04045 ? Math.pow((v+0.055)/1.055,2.4) : v/12.92;
+  });
+  return [
+    (rl*0.4124+gl*0.3576+bl*0.1805)*100,
+    (rl*0.2126+gl*0.7152+bl*0.0722)*100,
+    (rl*0.0193+gl*0.1192+bl*0.9505)*100
+  ];
+}
+function xyzToLab(x,y,z){
+  const refX=95.047, refY=100.0, refZ=108.883;
+  const [fx,fy,fz] = [x/refX,y/refY,z/refZ].map(v=> v>0.008856 ? Math.cbrt(v) : (7.787*v+16/116));
+  return [116*fy-16, 500*(fx-fy), 200*(fy-fz)];
+}
+function hexToLab(hex){
+  const {r,g,b} = hexToRgb(hex);
+  const [x,y,z] = rgbToXyz(r,g,b);
+  return xyzToLab(x,y,z);
+}
+function deltaE76(l1,l2){
+  return Math.sqrt((l1[0]-l2[0])**2 + (l1[1]-l2[1])**2 + (l1[2]-l2[2])**2);
+}
+function normalizeHex(input){
+  let h = input.trim().replace(/^#/,'');
+  if(/^[0-9a-fA-F]{3}$/.test(h)) h = h.split('').map(c=>c+c).join('');
+  if(!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+  return '#'+h.toLowerCase();
+}
+
+// ---- Build data + precompute Lab ----
+const COLORS = RAW.map(([c,n,h,f])=>({c,n,h,f}));
+COLORS.forEach(c=>{ c.lab = hexToLab(c.h); });
+
+// ---- Signature strip ----
+const stripEl = document.getElementById('strip');
+COLORS.forEach(c=>{
+  const s = document.createElement('span');
+  s.style.background = c.h;
+  stripEl.appendChild(s);
+});
+
+// ---- Tool logic ----
+const form = document.getElementById('checkForm');
+const input = document.getElementById('hexInput');
+const errorEl = document.getElementById('inputError');
+const resultEl = document.getElementById('result');
+
+function renderFound(entry){
+  resultEl.innerHTML = `
+    <div class="result-card found">
+      <p class="result-tag">✓ You have this one</p>
+      <div class="closest-row">
+        <span class="chip" style="background:${entry.h}"></span>
+        <div class="result-text">
+          <p class="result-name">${entry.c} · ${entry.n}</p>
+          <p class="result-hex">${entry.h.toUpperCase()} <button class="copy-btn" data-hex="${entry.h}" type="button">Copy</button></p>
+          <p class="result-family">${entry.f}</p>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderClosest(inputHex, ranked){
+  const top = ranked[0];
+  const label = top.de < 3 ? 'Very close match' : top.de < 8 ? 'Close match' : 'Nearest color available';
+  const alts = ranked.slice(1).map(r=>`
+      <div class="alt-chip-row">
+        <span class="chip small" style="background:${r.h}"></span>
+        <span>${r.c} · ${r.n}<span class="alt-de">ΔE ${r.de.toFixed(1)}</span></span>
+      </div>`).join('');
+  resultEl.innerHTML = `
+    <div class="result-card missing">
+      <p class="result-tag">Not in your set — closest is below</p>
+      <div class="closest-row">
+        <span class="chip" style="background:${inputHex}"></span>
+        <span class="chip-arrow">→</span>
+        <span class="chip" style="background:${top.h}"></span>
+        <div class="result-text">
+          <p class="result-name">${top.c} · ${top.n}</p>
+          <p class="result-hex">${top.h.toUpperCase()} <button class="copy-btn" data-hex="${top.h}" type="button">Copy</button></p>
+          <p class="result-de">${label} · ΔE ${top.de.toFixed(1)}</p>
+        </div>
+      </div>
+      <div class="alternates">${alts}</div>
+    </div>`;
+}
+
+function checkColor(raw){
+  if(!raw.trim()){
+    errorEl.textContent = '';
+    resultEl.innerHTML = '';
+    return;
+  }
+  const hex = normalizeHex(raw);
+  if(!hex){
+    errorEl.textContent = 'Enter a valid hex code, like #3E8969.';
+    resultEl.innerHTML = '';
+    return;
+  }
+  errorEl.textContent = '';
+  const exact = COLORS.find(c=>c.h.toLowerCase()===hex);
+  if(exact){
+    renderFound(exact);
+  } else {
+    const lab0 = hexToLab(hex);
+    const ranked = COLORS.map(c=>({...c, de: deltaE76(lab0, c.lab)})).sort((a,b)=>a.de-b.de).slice(0,3);
+    renderClosest(hex, ranked);
+  }
+}
+
+form.addEventListener('submit', e=>{ e.preventDefault(); checkColor(input.value); });
+let debounceId;
+input.addEventListener('input', ()=>{
+  clearTimeout(debounceId);
+  debounceId = setTimeout(()=>checkColor(input.value), 180);
+});
+
+resultEl.addEventListener('click', e=>{
+  const btn = e.target.closest('.copy-btn');
+  if(!btn) return;
+  navigator.clipboard.writeText(btn.dataset.hex.toUpperCase()).then(()=>{
+    const original = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(()=>{ btn.textContent = original; }, 1100);
+  });
+});
+
+// ---- Photo color picker ----
+function rgbToHex(r,g,b){
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+const dropZone = document.getElementById('dropZone');
+const imageInput = document.getElementById('imageInput');
+const pickerWrap = document.getElementById('pickerWrap');
+const canvas = document.getElementById('imageCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+const pickerHint = document.getElementById('pickerHint');
+const removeImageBtn = document.getElementById('removeImageBtn');
+const magnifier = document.getElementById('magnifier');
+const magCanvas = document.getElementById('magCanvas');
+const magCtx = magCanvas.getContext('2d');
+const MAX_DIM = 1400;
+
+dropZone.addEventListener('click', ()=>imageInput.click());
+dropZone.addEventListener('keydown', e=>{
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); imageInput.click(); }
+});
+dropZone.addEventListener('dragover', e=>{ e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e=>{
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  if(e.dataTransfer.files && e.dataTransfer.files[0]) loadImageFile(e.dataTransfer.files[0]);
+});
+imageInput.addEventListener('change', ()=>{
+  if(imageInput.files && imageInput.files[0]) loadImageFile(imageInput.files[0]);
+});
+
+function loadImageFile(file){
+  if(!file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(1, MAX_DIM / Math.max(img.naturalWidth, img.naturalHeight));
+      canvas.width = Math.round(img.naturalWidth * scale);
+      canvas.height = Math.round(img.naturalHeight * scale);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      dropZone.hidden = true;
+      pickerWrap.hidden = false;
+      pickerHint.textContent = 'Click anywhere on the photo to sample that color.';
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+removeImageBtn.addEventListener('click', ()=>{
+  pickerWrap.hidden = true;
+  dropZone.hidden = false;
+  magnifier.hidden = true;
+  pickerHint.textContent = '';
+  imageInput.value = '';
+});
+
+function canvasCoords(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return {
+    x: Math.max(0, Math.min(canvas.width-1, Math.floor((clientX-rect.left)*scaleX))),
+    y: Math.max(0, Math.min(canvas.height-1, Math.floor((clientY-rect.top)*scaleY)))
+  };
+}
+
+function showMagnifier(clientX, clientY, cx, cy){
+  const zoom = 14;
+  const half = Math.floor(zoom/2);
+  const sx = Math.max(0, Math.min(canvas.width-zoom, cx-half));
+  const sy = Math.max(0, Math.min(canvas.height-zoom, cy-half));
+  magCtx.imageSmoothingEnabled = false;
+  magCtx.clearRect(0,0,magCanvas.width,magCanvas.height);
+  magCtx.drawImage(canvas, sx, sy, zoom, zoom, 0, 0, magCanvas.width, magCanvas.height);
+  magnifier.style.left = (clientX + 24) + 'px';
+  magnifier.style.top = (clientY - 150) + 'px';
+  magnifier.hidden = false;
+}
+
+function pickAt(clientX, clientY){
+  const {x, y} = canvasCoords(clientX, clientY);
+  const pixel = ctx.getImageData(x, y, 1, 1).data;
+  const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+  input.value = hex;
+  checkColor(hex);
+  pickerHint.textContent = `Picked ${hex.toUpperCase()} from the photo — see the result above.`;
+  document.querySelector('.tool').scrollIntoView({block:'start'});
+}
+
+canvas.addEventListener('mousemove', e=>{
+  const {x, y} = canvasCoords(e.clientX, e.clientY);
+  showMagnifier(e.clientX, e.clientY, x, y);
+});
+canvas.addEventListener('mouseleave', ()=>{ magnifier.hidden = true; });
+canvas.addEventListener('click', e=>pickAt(e.clientX, e.clientY));
+
+canvas.addEventListener('touchstart', e=>{
+  const t = e.touches[0];
+  const {x, y} = canvasCoords(t.clientX, t.clientY);
+  showMagnifier(t.clientX, t.clientY, x, y);
+}, {passive:true});
+canvas.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  const t = e.touches[0];
+  const {x, y} = canvasCoords(t.clientX, t.clientY);
+  showMagnifier(t.clientX, t.clientY, x, y);
+}, {passive:false});
+canvas.addEventListener('touchend', e=>{
+  magnifier.hidden = true;
+  const t = e.changedTouches[0];
+  pickAt(t.clientX, t.clientY);
+});
+
+// ---- Browse accordion ----
+const familiesEl = document.getElementById('families');
+FAMILIES.forEach((fam, i)=>{
+  const members = COLORS.filter(c=>c.f===fam);
+  const section = document.createElement('div');
+  section.className = 'family' + (i===0 ? ' open' : '');
+  section.innerHTML = `
+    <button class="family-header" aria-expanded="${i===0}">
+      <span class="family-title">
+        <span class="family-dot" style="background:${members[0].h}"></span>
+        ${fam}
+      </span>
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span class="family-count">${members.length} colors</span>
+        <svg class="caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </span>
+    </button>
+    <div class="family-content">
+      ${members.map(c=>`
+        <button class="browse-chip" type="button" data-hex="${c.h}" title="${c.c} — ${c.n}">
+          <span class="chip-fill" style="background:${c.h}"></span>
+          <span class="chip-label"><b>${c.c}</b><span>${c.n}</span></span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+  familiesEl.appendChild(section);
+});
+
+familiesEl.addEventListener('click', e=>{
+  const header = e.target.closest('.family-header');
+  if(header){
+    const section = header.closest('.family');
+    const isOpen = section.classList.toggle('open');
+    header.setAttribute('aria-expanded', isOpen);
+    return;
+  }
+  const chip = e.target.closest('.browse-chip');
+  if(chip){
+    input.value = chip.dataset.hex;
+    checkColor(chip.dataset.hex);
+    input.scrollIntoView({block:'center'});
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>
