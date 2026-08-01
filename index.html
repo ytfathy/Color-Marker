@@ -339,6 +339,146 @@
     pointer-events:none;
   }
 
+  .result-palette-btn{
+    align-self:flex-start;
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:7px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .result-palette-btn:hover{border-color:var(--teal);color:var(--teal-ink);}
+  .result-palette-btn.added{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  /* my palette */
+  .palette-section{margin-top:40px;}
+  .palette-header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .palette-header h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0;color:var(--ink);}
+  .palette-count{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .palette-sub{color:var(--ink-soft);font-size:14px;margin:4px 0 16px;}
+  .palette-grid{display:flex;flex-wrap:wrap;gap:14px;min-height:20px;align-items:flex-start;}
+  .palette-empty{color:var(--ink-soft);font-size:13px;font-style:italic;margin:0;}
+  .palette-chip{position:relative;width:64px;text-align:center;}
+  .palette-chip .chip-fill{
+    width:64px;height:64px;border-radius:10px;display:block;
+    border:1px solid rgba(0,0,0,0.08);
+  }
+  .palette-remove{
+    position:absolute;top:-6px;right:-6px;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--ink);color:var(--paper);
+    border:2px solid var(--paper);
+    font-size:10px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;padding:0;
+  }
+  .palette-remove:hover{background:var(--blush-ink);}
+  .palette-chip-label{
+    display:block;margin-top:5px;font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;color:var(--ink-soft);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .clear-btn{
+    margin-top:16px;
+    font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
+    color:var(--ink-soft);background:none;border:1px solid var(--line);
+    border-radius:8px;padding:6px 12px;cursor:pointer;
+  }
+  .clear-btn:hover{border-color:var(--blush);color:var(--blush-ink);}
+
+  .palette-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px;}
+  .palette-name-input{
+    flex:1 1 220px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    padding:9px 12px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    color:var(--ink);
+  }
+  .palette-name-input:focus-visible{outline:2px solid var(--teal);border-color:var(--teal);}
+  .save-btn{
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:10px;
+    border:none;
+    background:var(--teal);
+    color:#fff;
+    cursor:pointer;
+  }
+  .save-btn:hover{background:var(--teal-ink);}
+  .save-hint{font-size:12.5px;color:var(--ink-soft);margin:8px 2px 0;min-height:16px;}
+  .save-hint.warn{color:var(--blush-ink);}
+
+  .saved-palettes{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);}
+  .saved-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px;}
+  .saved-header h3{font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:0;color:var(--ink);}
+  .saved-io{display:flex;gap:8px;}
+  .io-btn{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+  }
+  .io-btn:hover{border-color:var(--teal);color:var(--teal-ink);}
+  .io-btn:disabled{opacity:0.45;cursor:not-allowed;}
+  .io-btn.small{padding:4px 9px;font-size:11px;}
+  .io-btn.danger:hover{border-color:var(--blush);color:var(--blush-ink);}
+
+  .saved-list{display:flex;flex-direction:column;gap:8px;}
+  .saved-item{
+    display:flex;align-items:center;gap:12px;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--paper);
+    flex-wrap:wrap;
+  }
+  .saved-swatches{display:flex;gap:2px;flex-shrink:0;}
+  .saved-swatches span{width:16px;height:16px;border-radius:4px;border:1px solid rgba(0,0,0,0.08);display:block;}
+  .saved-more{
+    width:16px;height:16px;border-radius:4px;
+    background:var(--line);color:var(--ink-soft);
+    font-size:8px;display:flex;align-items:center;justify-content:center;
+  }
+  .saved-meta{flex:1;min-width:120px;}
+  .saved-name{margin:0;font-weight:600;font-size:13px;color:var(--ink);}
+  .saved-sub{margin:0;font-size:11.5px;color:var(--ink-soft);}
+  .saved-actions{display:flex;gap:6px;flex-shrink:0;}
+
+  .palette-select{
+    flex:1 1 200px;
+    padding:9px 10px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--card);
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .palette-select:focus-visible{outline:2px solid var(--teal);border-color:var(--teal);}
+  .preview-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+  .preview-canvases{display:flex;gap:16px;flex-wrap:wrap;}
+  .preview-pane{flex:1 1 260px;min-width:200px;}
+  .preview-caption{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);font-weight:600;margin:0 0 6px;}
+  .preview-caption-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .preview-caption-row .preview-caption{margin:0;}
+  .preview-pane canvas{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block;background:var(--paper);}
+
   /* browse section */
   .browse{margin-top:56px;}
   .browse h2{
@@ -383,21 +523,49 @@
   .browse-chip{
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:6px;
     padding:6px;
     border:1px solid var(--line);
     border-radius:8px;
     background:var(--paper);
+  }
+  .browse-chip:hover{border-color:var(--teal);}
+  .chip-main{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:1;
+    min-width:0;
+    border:none;
+    background:none;
+    padding:0;
     cursor:pointer;
     text-align:left;
     font-family:'Inter',sans-serif;
   }
-  .browse-chip:hover{border-color:var(--teal);}
-  .browse-chip:focus-visible{outline:2px solid var(--teal);outline-offset:1px;}
+  .chip-main:focus-visible{outline:2px solid var(--teal);outline-offset:1px;}
   .chip-fill{width:24px;height:24px;border-radius:6px;flex-shrink:0;border:1px solid rgba(0,0,0,0.08);}
   .chip-label{display:flex;flex-direction:column;line-height:1.25;overflow:hidden;}
   .chip-label b{font-size:11.5px;font-family:'JetBrains Mono',monospace;}
   .chip-label span{font-size:11px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .palette-toggle{
+    flex-shrink:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    font-size:13px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+  }
+  .palette-toggle:hover{border-color:var(--teal);color:var(--teal-ink);}
+  .palette-toggle.added{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .palette-toggle:focus-visible{outline:2px solid var(--teal);outline-offset:1px;}
 
   footer{padding:0 0 60px;color:var(--ink-soft);font-size:12px;}
 </style>
@@ -445,6 +613,69 @@
       <div class="magnifier" id="magnifier" hidden>
         <canvas id="magCanvas" width="120" height="120"></canvas>
         <div class="mag-crosshair"></div>
+      </div>
+    </div>
+
+    <section class="palette-section">
+      <div class="palette-header">
+        <h2>My palette</h2>
+        <span class="palette-count" id="paletteCount">0 colors</span>
+      </div>
+      <p class="palette-sub">Colors you've picked out, in one place. Tap "add to palette" on a result above, or the + on any swatch below.</p>
+      <div class="palette-grid" id="paletteGrid">
+        <p class="palette-empty" id="paletteEmpty">No colors yet.</p>
+      </div>
+      <div class="palette-controls">
+        <input type="text" id="paletteNameInput" class="palette-name-input" placeholder="Name this palette, e.g. Skin tones" maxlength="40">
+        <button type="button" class="save-btn" id="savePaletteBtn">Save palette</button>
+        <button type="button" class="clear-btn" id="clearPaletteBtn" hidden>Clear</button>
+      </div>
+      <p class="save-hint" id="saveHint"></p>
+
+      <div class="saved-palettes">
+        <div class="saved-header">
+          <h3>Saved palettes</h3>
+          <div class="saved-io">
+            <button type="button" class="io-btn" id="exportPalettesBtn" disabled>Export</button>
+            <label class="io-btn" for="importPalettesInput">Import</label>
+            <input type="file" id="importPalettesInput" accept="application/json" hidden>
+          </div>
+        </div>
+        <div class="saved-list" id="savedList">
+          <p class="palette-empty" id="savedEmpty">No saved palettes yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="tool photo-tool">
+      <p class="tool-label">Preview a photo in a palette</p>
+      <p class="tool-copy">Upload a photo, pick a palette, and see it recolored using only those markers — every pixel snaps to its nearest match, the same way the checker above works. Photos are resized a bit for speed, so fine detail softens, but it's enough to judge whether the palette works.</p>
+
+      <div class="drop-zone" id="previewDropZone" tabindex="0" role="button" aria-label="Upload a photo to preview">
+        <input type="file" id="previewImageInput" accept="image/*" hidden>
+        <p>Click to choose a photo, or drag one here</p>
+      </div>
+
+      <div class="preview-wrap" id="previewWrap" hidden>
+        <div class="preview-controls">
+          <select id="previewPaletteSelect" class="palette-select"></select>
+          <button type="button" class="primary" id="applyPaletteBtn">Apply palette</button>
+          <button type="button" class="remove-btn" id="removePreviewImageBtn">✕ Remove photo</button>
+        </div>
+        <div class="preview-canvases">
+          <div class="preview-pane">
+            <p class="preview-caption">Original</p>
+            <canvas id="previewSourceCanvas"></canvas>
+          </div>
+          <div class="preview-pane" id="previewOutputPane" hidden>
+            <div class="preview-caption-row">
+              <p class="preview-caption">With your palette</p>
+              <button type="button" class="io-btn small" id="downloadPreviewBtn">Download</button>
+            </div>
+            <canvas id="previewOutputCanvas"></canvas>
+          </div>
+        </div>
+        <p class="picker-hint" id="previewHint"></p>
       </div>
     </div>
 
@@ -727,6 +958,367 @@ const input = document.getElementById('hexInput');
 const errorEl = document.getElementById('inputError');
 const resultEl = document.getElementById('result');
 
+// ---- Palette state ----
+const paletteGrid = document.getElementById('paletteGrid');
+const paletteEmpty = document.getElementById('paletteEmpty');
+const paletteCount = document.getElementById('paletteCount');
+const clearPaletteBtn = document.getElementById('clearPaletteBtn');
+const paletteNameInput = document.getElementById('paletteNameInput');
+const savePaletteBtn = document.getElementById('savePaletteBtn');
+const saveHint = document.getElementById('saveHint');
+const savedList = document.getElementById('savedList');
+const savedEmpty = document.getElementById('savedEmpty');
+const exportPalettesBtn = document.getElementById('exportPalettesBtn');
+const importPalettesInput = document.getElementById('importPalettesInput');
+
+const palette = [];          // ordered array of hex strings — the palette being built right now
+const paletteSet = new Set();
+let savedPalettes = [];      // named, saved palettes: {name, colors, savedAt}
+
+function colorFor(hex){
+  return COLORS.find(c=>c.h.toLowerCase()===hex.toLowerCase());
+}
+
+function togglePalette(hex){
+  hex = hex.toLowerCase();
+  if(paletteSet.has(hex)){
+    paletteSet.delete(hex);
+    const i = palette.indexOf(hex);
+    if(i>-1) palette.splice(i,1);
+  } else {
+    paletteSet.add(hex);
+    palette.push(hex);
+  }
+  renderPalette();
+  syncToggleButtons();
+}
+
+function renderPalette(){
+  paletteCount.textContent = palette.length + (palette.length===1 ? ' color' : ' colors');
+  paletteEmpty.style.display = palette.length ? 'none' : 'block';
+  clearPaletteBtn.hidden = palette.length === 0;
+  paletteGrid.querySelectorAll('.palette-chip').forEach(el=>el.remove());
+  palette.forEach(hex=>{
+    const entry = colorFor(hex);
+    const div = document.createElement('div');
+    div.className = 'palette-chip';
+    div.innerHTML = `
+      <span class="chip-fill" style="background:${hex}"></span>
+      <button class="palette-remove" data-hex="${hex}" title="Remove from palette" type="button">✕</button>
+      <span class="palette-chip-label">${entry ? entry.c : hex.toUpperCase()}</span>
+    `;
+    paletteGrid.appendChild(div);
+  });
+}
+
+function syncToggleButtons(){
+  document.querySelectorAll('.palette-toggle').forEach(btn=>{
+    const on = paletteSet.has(btn.dataset.hex.toLowerCase());
+    btn.classList.toggle('added', on);
+    btn.textContent = on ? '✓' : '+';
+    btn.setAttribute('aria-pressed', on);
+  });
+  const resultBtn = document.querySelector('#result .result-palette-btn');
+  if(resultBtn){
+    const on = paletteSet.has(resultBtn.dataset.hex.toLowerCase());
+    resultBtn.classList.toggle('added', on);
+    resultBtn.textContent = on ? '✓ In palette' : '+ Add to palette';
+  }
+}
+
+paletteGrid.addEventListener('click', e=>{
+  const btn = e.target.closest('.palette-remove');
+  if(!btn) return;
+  togglePalette(btn.dataset.hex);
+});
+
+clearPaletteBtn.addEventListener('click', ()=>{
+  palette.length = 0;
+  paletteSet.clear();
+  renderPalette();
+  syncToggleButtons();
+});
+
+renderPalette();
+
+// ---- Saved (named) palettes ----
+function sameName(a, b){
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
+function savePalette(){
+  const name = paletteNameInput.value.trim();
+  if(!name){
+    saveHint.textContent = 'Give your palette a name first.';
+    saveHint.classList.add('warn');
+    return;
+  }
+  if(palette.length === 0){
+    saveHint.textContent = 'Add at least one color before saving.';
+    saveHint.classList.add('warn');
+    return;
+  }
+  const entry = { name, colors: [...palette], savedAt: new Date().toISOString() };
+  const existingIdx = savedPalettes.findIndex(p=>sameName(p.name, name));
+  if(existingIdx > -1){
+    savedPalettes[existingIdx] = entry;
+    saveHint.textContent = `Updated "${name}".`;
+  } else {
+    savedPalettes.push(entry);
+    saveHint.textContent = `Saved "${name}".`;
+  }
+  saveHint.classList.remove('warn');
+  renderSavedPalettes();
+}
+
+function renderSavedPalettes(){
+  savedEmpty.style.display = savedPalettes.length ? 'none' : 'block';
+  exportPalettesBtn.disabled = savedPalettes.length === 0;
+  savedList.querySelectorAll('.saved-item').forEach(el=>el.remove());
+  savedPalettes.slice().reverse().forEach(p=>{
+    const item = document.createElement('div');
+    item.className = 'saved-item';
+    const shown = p.colors.slice(0, 6);
+    const extra = p.colors.length - shown.length;
+    const dateStr = new Date(p.savedAt).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    item.innerHTML = `
+      <div class="saved-swatches">
+        ${shown.map(h=>`<span style="background:${h}"></span>`).join('')}
+        ${extra > 0 ? `<span class="saved-more">+${extra}</span>` : ''}
+      </div>
+      <div class="saved-meta">
+        <p class="saved-name">${p.name}</p>
+        <p class="saved-sub">${p.colors.length} color${p.colors.length===1 ? '' : 's'} · saved ${dateStr}</p>
+      </div>
+      <div class="saved-actions">
+        <button type="button" class="io-btn small" data-action="view" data-name="${p.name}">View</button>
+        <button type="button" class="io-btn small danger" data-action="delete" data-name="${p.name}">Delete</button>
+      </div>
+    `;
+    savedList.appendChild(item);
+  });
+  refreshPaletteSelect();
+}
+
+savePaletteBtn.addEventListener('click', savePalette);
+paletteNameInput.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); savePalette(); }
+});
+
+savedList.addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-action]');
+  if(!btn) return;
+  const idx = savedPalettes.findIndex(p=>p.name === btn.dataset.name);
+  if(idx === -1) return;
+
+  if(btn.dataset.action === 'view'){
+    const p = savedPalettes[idx];
+    palette.length = 0;
+    paletteSet.clear();
+    p.colors.forEach(h=>{ palette.push(h); paletteSet.add(h.toLowerCase()); });
+    paletteNameInput.value = p.name;
+    renderPalette();
+    syncToggleButtons();
+    saveHint.textContent = `Viewing "${p.name}" — editing it here won't update the saved version until you save again.`;
+    saveHint.classList.remove('warn');
+    document.querySelector('.palette-section').scrollIntoView({block:'start'});
+  } else if(btn.dataset.action === 'delete'){
+    savedPalettes.splice(idx, 1);
+    renderSavedPalettes();
+  }
+});
+
+exportPalettesBtn.addEventListener('click', ()=>{
+  if(savedPalettes.length === 0) return;
+  const data = JSON.stringify({
+    source: 'Honolulu B Color Match',
+    exportedAt: new Date().toISOString(),
+    palettes: savedPalettes
+  }, null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'honolulu-b-palettes.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+importPalettesInput.addEventListener('change', ()=>{
+  const file = importPalettesInput.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try {
+      const data = JSON.parse(reader.result);
+      const incoming = Array.isArray(data.palettes) ? data.palettes : (Array.isArray(data) ? data : null);
+      if(!incoming) throw new Error('Unrecognized file format');
+      let added = 0, updated = 0;
+      incoming.forEach(p=>{
+        if(!p || !p.name || !Array.isArray(p.colors)) return;
+        const idx = savedPalettes.findIndex(sp=>sameName(sp.name, p.name));
+        const entry = { name: p.name, colors: p.colors, savedAt: p.savedAt || new Date().toISOString() };
+        if(idx > -1){ savedPalettes[idx] = entry; updated++; }
+        else { savedPalettes.push(entry); added++; }
+      });
+      renderSavedPalettes();
+      saveHint.textContent = `Imported ${added} new palette${added===1?'':'s'}, updated ${updated}.`;
+      saveHint.classList.remove('warn');
+    } catch (err){
+      saveHint.textContent = "Couldn't read that file — make sure it's a palette export from this tool.";
+      saveHint.classList.add('warn');
+    }
+  };
+  reader.readAsText(file);
+  importPalettesInput.value = '';
+});
+
+// ---- Preview a photo in a palette ----
+const previewDropZone = document.getElementById('previewDropZone');
+const previewImageInput = document.getElementById('previewImageInput');
+const previewWrap = document.getElementById('previewWrap');
+const previewSourceCanvas = document.getElementById('previewSourceCanvas');
+const previewSourceCtx = previewSourceCanvas.getContext('2d', { willReadFrequently: true });
+const previewOutputCanvas = document.getElementById('previewOutputCanvas');
+const previewOutputCtx = previewOutputCanvas.getContext('2d');
+const previewOutputPane = document.getElementById('previewOutputPane');
+const previewPaletteSelect = document.getElementById('previewPaletteSelect');
+const applyPaletteBtn = document.getElementById('applyPaletteBtn');
+const removePreviewImageBtn = document.getElementById('removePreviewImageBtn');
+const previewHint = document.getElementById('previewHint');
+const downloadPreviewBtn = document.getElementById('downloadPreviewBtn');
+const PREVIEW_MAX_DIM = 500;
+
+function refreshPaletteSelect(){
+  const previous = previewPaletteSelect.value;
+  previewPaletteSelect.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = '__all__';
+  allOpt.textContent = 'All colors (full set)';
+  previewPaletteSelect.appendChild(allOpt);
+  savedPalettes.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.name;
+    opt.textContent = `${p.name} (${p.colors.length})`;
+    previewPaletteSelect.appendChild(opt);
+  });
+  if([...previewPaletteSelect.options].some(o=>o.value===previous)){
+    previewPaletteSelect.value = previous;
+  }
+}
+refreshPaletteSelect();
+
+previewDropZone.addEventListener('click', ()=>previewImageInput.click());
+previewDropZone.addEventListener('keydown', e=>{
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); previewImageInput.click(); }
+});
+previewDropZone.addEventListener('dragover', e=>{ e.preventDefault(); previewDropZone.classList.add('dragover'); });
+previewDropZone.addEventListener('dragleave', ()=>previewDropZone.classList.remove('dragover'));
+previewDropZone.addEventListener('drop', e=>{
+  e.preventDefault();
+  previewDropZone.classList.remove('dragover');
+  if(e.dataTransfer.files && e.dataTransfer.files[0]) loadPreviewImage(e.dataTransfer.files[0]);
+});
+previewImageInput.addEventListener('change', ()=>{
+  if(previewImageInput.files && previewImageInput.files[0]) loadPreviewImage(previewImageInput.files[0]);
+});
+
+function loadPreviewImage(file){
+  if(!file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(1, PREVIEW_MAX_DIM / Math.max(img.naturalWidth, img.naturalHeight));
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      previewSourceCanvas.width = w;
+      previewSourceCanvas.height = h;
+      previewSourceCtx.drawImage(img, 0, 0, w, h);
+      previewDropZone.hidden = true;
+      previewWrap.hidden = false;
+      previewOutputPane.hidden = true;
+      refreshPaletteSelect();
+      previewHint.textContent = 'Pick a palette above, then hit Apply palette.';
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+removePreviewImageBtn.addEventListener('click', ()=>{
+  previewWrap.hidden = true;
+  previewDropZone.hidden = false;
+  previewOutputPane.hidden = true;
+  previewImageInput.value = '';
+  previewHint.textContent = '';
+});
+
+function labFromRgb(r,g,b){
+  return xyzToLab(...rgbToXyz(r,g,b));
+}
+
+function nearestInPalette(r,g,b,paletteColors){
+  const lab0 = labFromRgb(r,g,b);
+  let best = paletteColors[0], bestDe = Infinity;
+  for(const c of paletteColors){
+    const de = deltaE76(lab0, c.lab);
+    if(de < bestDe){ bestDe = de; best = c; }
+  }
+  return best;
+}
+
+applyPaletteBtn.addEventListener('click', ()=>{
+  const key = previewPaletteSelect.value;
+  let paletteColors;
+  if(key === '__all__'){
+    paletteColors = COLORS;
+  } else {
+    const sp = savedPalettes.find(p=>p.name === key);
+    if(!sp){ previewHint.textContent = 'Pick a palette first.'; return; }
+    paletteColors = sp.colors.map(h=>colorFor(h)).filter(Boolean);
+    if(paletteColors.length === 0){ previewHint.textContent = 'That palette has no colors in it.'; return; }
+  }
+
+  const w = previewSourceCanvas.width, h = previewSourceCanvas.height;
+  previewOutputCanvas.width = w;
+  previewOutputCanvas.height = h;
+  const srcData = previewSourceCtx.getImageData(0, 0, w, h);
+  const outData = previewOutputCtx.createImageData(w, h);
+  const src = srcData.data, out = outData.data;
+  const cache = new Map();
+
+  for(let i=0;i<src.length;i+=4){
+    const r=src[i], g=src[i+1], b=src[i+2], a=src[i+3];
+    const cacheKey = (r<<16)|(g<<8)|b;
+    let match = cache.get(cacheKey);
+    if(!match){
+      match = nearestInPalette(r,g,b,paletteColors);
+      cache.set(cacheKey, match);
+    }
+    const mrgb = hexToRgb(match.h);
+    out[i]=mrgb.r; out[i+1]=mrgb.g; out[i+2]=mrgb.b; out[i+3]=a;
+  }
+  previewOutputCtx.putImageData(outData, 0, 0);
+  previewOutputPane.hidden = false;
+  previewHint.textContent = `Recolored using ${paletteColors.length} marker${paletteColors.length===1?'':'s'}.`;
+});
+
+downloadPreviewBtn.addEventListener('click', ()=>{
+  previewOutputCanvas.toBlob(blob=>{
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'palette-preview.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+});
+
 function renderFound(entry){
   resultEl.innerHTML = `
     <div class="result-card found">
@@ -739,7 +1331,9 @@ function renderFound(entry){
           <p class="result-family">${entry.f}</p>
         </div>
       </div>
+      <button class="result-palette-btn" type="button" data-hex="${entry.h}">+ Add to palette</button>
     </div>`;
+  syncToggleButtons();
 }
 
 function renderClosest(inputHex, ranked){
@@ -764,7 +1358,9 @@ function renderClosest(inputHex, ranked){
         </div>
       </div>
       <div class="alternates">${alts}</div>
+      <button class="result-palette-btn" type="button" data-hex="${top.h}">+ Add to palette</button>
     </div>`;
+  syncToggleButtons();
 }
 
 function checkColor(raw){
@@ -798,13 +1394,19 @@ input.addEventListener('input', ()=>{
 });
 
 resultEl.addEventListener('click', e=>{
-  const btn = e.target.closest('.copy-btn');
-  if(!btn) return;
-  navigator.clipboard.writeText(btn.dataset.hex.toUpperCase()).then(()=>{
-    const original = btn.textContent;
-    btn.textContent = 'Copied';
-    setTimeout(()=>{ btn.textContent = original; }, 1100);
-  });
+  const copyBtn = e.target.closest('.copy-btn');
+  if(copyBtn){
+    navigator.clipboard.writeText(copyBtn.dataset.hex.toUpperCase()).then(()=>{
+      const original = copyBtn.textContent;
+      copyBtn.textContent = 'Copied';
+      setTimeout(()=>{ copyBtn.textContent = original; }, 1100);
+    });
+    return;
+  }
+  const paletteBtn = e.target.closest('.result-palette-btn');
+  if(paletteBtn){
+    togglePalette(paletteBtn.dataset.hex);
+  }
 });
 
 // ---- Photo color picker ----
@@ -942,10 +1544,13 @@ FAMILIES.forEach((fam, i)=>{
     </button>
     <div class="family-content">
       ${members.map(c=>`
-        <button class="browse-chip" type="button" data-hex="${c.h}" title="${c.c} — ${c.n}">
-          <span class="chip-fill" style="background:${c.h}"></span>
-          <span class="chip-label"><b>${c.c}</b><span>${c.n}</span></span>
-        </button>
+        <div class="browse-chip">
+          <button class="chip-main" type="button" data-hex="${c.h}" title="${c.c} — ${c.n}">
+            <span class="chip-fill" style="background:${c.h}"></span>
+            <span class="chip-label"><b>${c.c}</b><span>${c.n}</span></span>
+          </button>
+          <button class="palette-toggle" type="button" data-hex="${c.h}" title="Add to palette" aria-pressed="false">+</button>
+        </div>
       `).join('')}
     </div>
   `;
@@ -960,7 +1565,12 @@ familiesEl.addEventListener('click', e=>{
     header.setAttribute('aria-expanded', isOpen);
     return;
   }
-  const chip = e.target.closest('.browse-chip');
+  const toggleBtn = e.target.closest('.palette-toggle');
+  if(toggleBtn){
+    togglePalette(toggleBtn.dataset.hex);
+    return;
+  }
+  const chip = e.target.closest('.chip-main');
   if(chip){
     input.value = chip.dataset.hex;
     checkColor(chip.dataset.hex);
