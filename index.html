@@ -621,6 +621,7 @@
         <h2>My palette</h2>
         <span class="palette-count" id="paletteCount">0 colors</span>
       </div>
+      <p class="storage-notice" id="storageNotice" hidden></p>
       <p class="palette-sub">Colors you've picked out, in one place. Tap "add to palette" on a result above, or the + on any swatch below.</p>
       <div class="palette-grid" id="paletteGrid">
         <p class="palette-empty" id="paletteEmpty">No colors yet.</p>
@@ -975,6 +976,64 @@ const palette = [];          // ordered array of hex strings — the palette bei
 const paletteSet = new Set();
 let savedPalettes = [];      // named, saved palettes: {name, colors, savedAt}
 
+// ---- Local persistence (this browser only, no account needed) ----
+const STORAGE_KEY_SAVED = 'honolulu-b:saved-palettes:v1';
+const STORAGE_KEY_WORKING = 'honolulu-b:working-palette:v1';
+
+function storageAvailable(){
+  try {
+    const k = '__honolulu_b_test__';
+    window.localStorage.setItem(k, '1');
+    window.localStorage.removeItem(k);
+    return true;
+  } catch (e){
+    return false;
+  }
+}
+const hasStorage = storageAvailable();
+
+function persistSaved(){
+  if(!hasStorage) return;
+  try { window.localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(savedPalettes)); }
+  catch(e){ /* storage full or blocked — fail quietly, in-memory state still works */ }
+}
+
+function persistWorking(){
+  if(!hasStorage) return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY_WORKING, JSON.stringify({
+      colors: palette,
+      name: paletteNameInput.value
+    }));
+  } catch(e){ /* ignore */ }
+}
+
+function loadFromStorage(){
+  if(!hasStorage) return;
+  try {
+    const savedRaw = window.localStorage.getItem(STORAGE_KEY_SAVED);
+    if(savedRaw){
+      const parsed = JSON.parse(savedRaw);
+      if(Array.isArray(parsed)) savedPalettes = parsed;
+    }
+  } catch(e){ /* corrupt data — start fresh */ }
+  try {
+    const workingRaw = window.localStorage.getItem(STORAGE_KEY_WORKING);
+    if(workingRaw){
+      const w = JSON.parse(workingRaw);
+      if(w && Array.isArray(w.colors)){
+        w.colors.forEach(h=>{
+          if(!paletteSet.has(h.toLowerCase())){
+            palette.push(h);
+            paletteSet.add(h.toLowerCase());
+          }
+        });
+      }
+      if(w && typeof w.name === 'string') paletteNameInput.value = w.name;
+    }
+  } catch(e){ /* corrupt data — start fresh */ }
+}
+
 function colorFor(hex){
   return COLORS.find(c=>c.h.toLowerCase()===hex.toLowerCase());
 }
@@ -1009,6 +1068,7 @@ function renderPalette(){
     `;
     paletteGrid.appendChild(div);
   });
+  persistWorking();
 }
 
 function syncToggleButtons(){
@@ -1032,14 +1092,14 @@ paletteGrid.addEventListener('click', e=>{
   togglePalette(btn.dataset.hex);
 });
 
+paletteNameInput.addEventListener('input', persistWorking);
+
 clearPaletteBtn.addEventListener('click', ()=>{
   palette.length = 0;
   paletteSet.clear();
   renderPalette();
   syncToggleButtons();
 });
-
-renderPalette();
 
 // ---- Saved (named) palettes ----
 function sameName(a, b){
@@ -1098,6 +1158,7 @@ function renderSavedPalettes(){
     savedList.appendChild(item);
   });
   refreshPaletteSelect();
+  persistSaved();
 }
 
 savePaletteBtn.addEventListener('click', savePalette);
@@ -1578,6 +1639,13 @@ familiesEl.addEventListener('click', e=>{
     input.focus();
   }
 });
+
+// ---- Restore anything saved in this browser, now that everything above is wired up ----
+loadFromStorage();
+renderPalette();
+renderSavedPalettes();
+syncToggleButtons();
+
 </script>
 </body>
 </html>
