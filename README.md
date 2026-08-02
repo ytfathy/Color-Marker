@@ -34,14 +34,13 @@ The project is built as a single, zero-dependency HTML file containing responsiv
 2. **RGB to CIE $L^*a^*b^*$**:
    - Converts $RGB$ to standard $XYZ$ color space using the $D_{65}$ illuminant reference white.
    - Transforms $XYZ$ to non-linear $L^*a^*b^*$ coordinates representing lightness ($L^*$), green-red axis ($a^*$), and blue-yellow axis ($b^*$).
-3. **CIE76 Delta-E Calculation**:
-   Calculates color difference ($\Delta E^*_{ab}$) between the target color ($L_1^*, a_1^*, b_1^*$) and candidate markers ($L_2^*, a_2^*, b_2^*$) using standard Euclidean distance in $L^*a^*b^*$ space:
+3. **CIE76 Delta-E Calculation**: Calculates color difference ($\Delta E^*_{ab}$) between the target color ($L_1^*, a_1^*, b_1^*$) and candidate markers ($L_2^*, a_2^*, b_2^*$) using standard Euclidean distance in $L^*a^*b^*$ space:
 
-$$\Delta E^*_{ab} = \sqrt{(L^*_2 - L^*_1)^2 + (a^*_2 - a^*_1)^2 + (b^*_2 - b^*_1)^2}$$
+$$\Delta E^*_{ab} = \sqrt{(L_2^* - L_1^*)^2 + (a_2^* - a_1^*)^2 + (b_2^* - b_1^*)^2}$$
 
-   *   $\Delta E \le 1.0$: Difference is visually imperceptible to human eyes.
-   *   $\Delta E \le 3.0$: Close match; noticeable only on close inspection.
-   *   $\Delta E > 5.0$: Noticeably different color shade.
+*   $\Delta E \le 1.0$: Difference is visually imperceptible to human eyes.
+*   $\Delta E \le 3.0$: Close match; noticeable only on close inspection.
+*   $\Delta E > 5.0$: Noticeably different color shade.
 
 ---
 
