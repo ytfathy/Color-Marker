@@ -506,6 +506,44 @@
   .preview-pane #previewOutputCanvas{cursor:pointer;}
   .canvas-hint{font-size:11.5px;color:var(--ink-soft);margin:6px 0 0;font-style:italic;}
 
+  .smart-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    font-weight:700;
+    color:var(--teal-ink);
+    background:#E8F9F9;
+    border:1px solid #9ADEDE;
+    border-radius:20px;
+    padding:2px 8px;
+    letter-spacing:0.06em;
+    vertical-align:middle;
+    margin-left:4px;
+  }
+  .mode-btn[data-mode="smart"]{border-color:#9ADEDE;}
+  .mode-btn[data-mode="smart"].active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .mode-btn[data-mode="smart"]:hover:not(.active){border-color:var(--teal);color:var(--teal-ink);background:#E8F9F9;}
+  .apply-progress{
+    display:none;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:10px;
+  }
+  .apply-progress.visible{display:flex;}
+  .spinner{
+    width:16px;height:16px;
+    border:2px solid var(--line);
+    border-top-color:var(--teal);
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+    flex-shrink:0;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
   .region-picker{
     position:fixed;
     display:flex;
@@ -707,6 +745,7 @@
 
       <div class="mode-toggle" id="previewModeToggle">
         <button type="button" class="mode-btn active" data-mode="lineart">Coloring page</button>
+        <button type="button" class="mode-btn" data-mode="smart">Smart fill <span class="smart-badge">AI</span></button>
         <button type="button" class="mode-btn" data-mode="photo">Photo</button>
       </div>
       <p class="tool-copy mode-copy" id="modeCopy">Best for clean line art on a light background — it finds each enclosed shape and fills it with one color from the palette. Click any shape afterward to change just that one.</p>
@@ -740,6 +779,7 @@
             <p class="canvas-hint" id="canvasHint">Click any shape to change just that one.</p>
           </div>
         </div>
+        <div class="apply-progress" id="applyProgress"><div class="spinner"></div><span id="applyProgressText">Analyzing regions…</span></div>
         <p class="picker-hint" id="previewHint"></p>
       </div>
 
@@ -1328,6 +1368,7 @@ let coloringState = null; // {labels, isLine, regionColor, w, h, srcData, palett
 
 const MODE_COPY = {
   lineart: 'Best for clean line art on a light background — it finds each enclosed shape and fills it with one color from the palette. Click any shape afterward to change just that one.',
+  smart: 'Smart fill analyzes the image like an artist — it reads the scene, understands which areas are sky, ground, or subject, and paints each region with the right palette color. Adjacent shapes never clash, large areas get the dominant tones, and fills have soft watercolor gradients instead of flat blocks.',
   photo: 'Best for photos — every pixel snaps to its nearest match in the palette. Fine detail softens a little, but it\u2019s enough to judge whether the palette works.'
 };
 
@@ -1520,6 +1561,249 @@ function renderColoring(){
   previewOutputCtx.putImageData(outData, 0, 0);
 }
 
+// ---- Smart mode: AI-aware palette application with watercolor rendering ----
+function applySmartColoring(paletteColors){
+  const w = previewSourceCanvas.width, h = previewSourceCanvas.height;
+  previewOutputCanvas.width = w;
+  previewOutputCanvas.height = h;
+  const srcData = previewSourceCtx.getImageData(0, 0, w, h);
+  const threshold = parseInt(lineThresholdInput.value, 10);
+
+  const progressEl = document.getElementById('applyProgress');
+  const progressText = document.getElementById('applyProgressText');
+  progressEl.classList.add('visible');
+  progressText.textContent = 'Analyzing regions…';
+
+  requestAnimationFrame(()=>{
+    const { labels, regions, isLine } = labelRegions(srcData, w, h, threshold);
+    const MIN_REGION_PIXELS = Math.max(12, Math.round(w * h * 0.0008));
+    const significant = regions.filter(r=>r.count >= MIN_REGION_PIXELS);
+    if(significant.length === 0){
+      progressEl.classList.remove('visible');
+      coloringState = null;
+      previewOutputCtx.clearRect(0, 0, w, h);
+      previewOutputPane.hidden = false;
+      previewHint.textContent = "Couldn't find any enclosed shapes to fill — try lowering the line sensitivity, or check the image has clear dark outlines.";
+      return;
+    }
+
+    progressText.textContent = 'Understanding the scene…';
+
+    requestAnimationFrame(()=>{
+      // Compute features for each significant region
+      const features = significant.map(r=>{
+        let sumX=0, sumY=0, sumLum=0, minR=255, maxR=0, minG=255, maxG=0, minB=255, maxB=0;
+        const n = w * h;
+        for(let i=0;i<n;i++){
+          if(labels[i] === r.id){
+            const o = i*4;
+            const x = i % w, y = (i / w) | 0;
+            sumX += x; sumY += y;
+            const lum = 0.299*srcData.data[o] + 0.587*srcData.data[o+1] + 0.114*srcData.data[o+2];
+            sumLum += lum;
+            minR=Math.min(minR,srcData.data[o]); maxR=Math.max(maxR,srcData.data[o]);
+            minG=Math.min(minG,srcData.data[o+1]); maxG=Math.max(maxG,srcData.data[o+1]);
+            minB=Math.min(minB,srcData.data[o+2]); maxB=Math.max(maxB,srcData.data[o+2]);
+          }
+        }
+        const cx = sumX / r.count, cy = sumY / r.count;
+        const avgLum = sumLum / r.count;
+        const bboxW = maxR - minR, bboxH = maxG - minG;
+        return {
+          id: r.id, count: r.count,
+          cx, cy,
+          avgLum,
+          area: r.count,
+          relY: cy / h,
+          relX: cx / w,
+          edge: Math.sqrt(r.count) * 0.3
+        };
+      });
+
+      // Build adjacency graph
+      const adj = new Map();
+      features.forEach(f=>adj.set(f.id, new Set()));
+      const n = w * h;
+      for(let i=0;i<n;i++){
+        if(isLine[i]) continue;
+        const l = labels[i];
+        if(l === -1) continue;
+        const x = i % w, y = (i / w) | 0;
+        if(x < w-1){ const ni = i+1; if(labels[ni] !== -1 && labels[ni] !== l && labels[ni] !== undefined){ adj.get(l)?.add(labels[ni]); adj.get(labels[ni])?.add(l); } }
+        if(y < h-1){ const ni = i+w; if(labels[ni] !== -1 && labels[ni] !== l && labels[ni] !== undefined){ adj.get(l)?.add(labels[ni]); adj.get(labels[ni])?.add(l); } }
+      }
+
+      progressText.textContent = 'Matching colors to regions…';
+
+      requestAnimationFrame(()=>{
+        // Sort palette colors by luminosity (darkest first)
+        const paletteSorted = [...paletteColors].map(c=>{
+          const rgb = hexToRgb(c.h);
+          const lum = 0.299*rgb.r + 0.587*rgb.g + 0.114*rgb.b;
+          return { ...c, lum };
+        }).sort((a,b)=>a.lum - b.lum);
+
+        // Sort regions: largest first for greedy coloring
+        const sortedFeatures = [...features].sort((a,b)=>b.area - a.area);
+
+        const regionColor = new Array(regions.length).fill(null);
+        const usedColors = new Map();
+
+        sortedFeatures.forEach(f=>{
+          const neighbors = adj.get(f.id) || new Set();
+          const neighborColors = new Set();
+          neighbors.forEach(nid=>{
+            if(regionColor[nid]) neighborColors.add(regionColor[nid]);
+          });
+
+          // Score each palette color for this region
+          let bestColor = null, bestScore = -Infinity;
+          paletteSorted.forEach((pc, idx)=>{
+            if(neighborColors.has(pc.h)) return; // skip adjacent same-color
+            let score = 0;
+            // Position-based: top of image → darker colors (sky), bottom → lighter/warmer
+            const positionScore = 1 - Math.abs(f.relY - (idx / Math.max(1, paletteSorted.length - 1)));
+            score += positionScore * 3;
+            // Size-based: large regions get dominant (mid-luminance) colors
+            const sizeRatio = f.area / features[0].area;
+            const lumDistFromMid = Math.abs(pc.lum - 128) / 128;
+            if(sizeRatio > 0.3) score += (1 - lumDistFromMid) * 2;
+            else score += lumDistFromMid * 1.5; // small regions get extreme colors (accents)
+            // Spread: prefer less-used colors
+            const useCount = usedColors.get(pc.h) || 0;
+            score -= useCount * 0.5;
+            // Luminosity match: darker regions get darker colors
+            const lumMatch = 1 - Math.abs(f.avgLum / 255 - pc.lum / 255);
+            score += lumMatch * 1.5;
+            if(score > bestScore){ bestScore = score; bestColor = pc.h; }
+          });
+
+          // Fallback: if all colors are adjacent, pick least-used
+          if(!bestColor){
+            let minUse = Infinity;
+            paletteSorted.forEach(pc=>{
+              const uc = usedColors.get(pc.h) || 0;
+              if(uc < minUse){ minUse = uc; bestColor = pc.h; }
+            });
+          }
+
+          regionColor[f.id] = bestColor;
+          usedColors.set(bestColor, (usedColors.get(bestColor) || 0) + 1);
+        });
+
+        coloringState = { labels, isLine, regionColor, w, h, srcData, paletteColors };
+        progressText.textContent = 'Painting watercolor fills…';
+
+        requestAnimationFrame(()=>{
+          renderSmartColoring();
+          progressEl.classList.remove('visible');
+          previewOutputPane.hidden = false;
+          const used = new Set(regionColor.filter(Boolean)).size;
+          previewHint.textContent = `Smart-filled ${significant.length} shape${significant.length===1?'':'s'} with ${used} of ${paletteColors.length} color${paletteColors.length===1?'':'s'}. The AI read the scene and matched colors to position, size, and adjacency. Click any shape to fine-tune it.`;
+        });
+      });
+    });
+  });
+}
+
+function renderSmartColoring(){
+  const { labels, isLine, regionColor, w, h, srcData } = coloringState;
+  const ctx = previewOutputCtx;
+
+  // Start with original image as base
+  ctx.clearRect(0, 0, w, h);
+  ctx.putImageData(srcData, 0, 0);
+
+  // Compute region centroids for gradient direction
+  const centroids = new Map();
+  const regionPixels = new Map();
+  const n = w * h;
+  for(let i=0;i<n;i++){
+    if(isLine[i] || labels[i] === -1) continue;
+    const id = labels[i];
+    if(!centroids.has(id)){
+      centroids.set(id, { sx:0, sy:0, count:0 });
+      regionPixels.set(id, []);
+    }
+    const c = centroids.get(id);
+    const x = i % w, y = (i / w) | 0;
+    c.sx += x; c.sy += y; c.count++;
+  }
+  centroids.forEach((v,k)=>{
+    v.cx = v.sx / v.count;
+    v.cy = v.sy / v.count;
+  });
+
+  // Render each region with a soft radial gradient
+  const coloredRegions = new Set();
+  for(let i=0;i<n;i++){
+    if(isLine[i] || labels[i] === -1) continue;
+    const id = labels[i];
+    if(!regionColor[id] || coloredRegions.has(id)) continue;
+    coloredRegions.add(id);
+
+    const c = centroids.get(id);
+    const hex = regionColor[id];
+    const rgb = hexToRgb(hex);
+    const radius = Math.sqrt(c.count) * 0.6;
+
+    // Radial gradient from center: slightly lighter center → full color edge
+    const grad = ctx.createRadialGradient(c.cx, c.cy, 0, c.cx, c.cy, Math.max(radius, 10));
+    const lighten = (v)=>Math.min(255, v + 25);
+    grad.addColorStop(0, `rgba(${lighten(rgb.r)},${lighten(rgb.g)},${lighten(rgb.b)},0.85)`);
+    grad.addColorStop(0.6, `rgba(${rgb.r},${rgb.g},${rgb.b},0.92)`);
+    grad.addColorStop(1, `rgba(${Math.max(0,rgb.r-15)},${Math.max(0,rgb.g-15)},${Math.max(0,rgb.b-15)},0.95)`);
+
+    ctx.save();
+    // Clip to region using a mask
+    ctx.beginPath();
+    // Build path from region pixels (simplified: fill bounding area with color, then composite)
+    ctx.fillStyle = grad;
+    // Use compositing: draw gradient over entire canvas, but only in region pixels
+    // Create a temporary mask
+    const maskCanvas = document.createElement('canvas');
+    maskCanvas.width = w; maskCanvas.height = h;
+    const maskCtx = maskCanvas.getContext('2d');
+    const maskData = maskCtx.createImageData(w, h);
+    for(let j=0;j<n;j++){
+      if(labels[j] === id && !isLine[j]){
+        const o = j * 4;
+        maskData.data[o] = 255; maskData.data[o+1] = 255; maskData.data[o+2] = 255; maskData.data[o+3] = 255;
+      }
+    }
+    maskCtx.putImageData(maskData, 0, 0);
+
+    // Draw gradient onto a temp canvas
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = w; tempCanvas.height = h;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.fillStyle = grad;
+    tempCtx.fillRect(0, 0, w, h);
+
+    // Use mask to clip
+    tempCtx.globalCompositeOperation = 'destination-in';
+    tempCtx.drawImage(maskCanvas, 0, 0);
+
+    // Draw the clipped gradient onto main canvas with soft edges
+    ctx.globalAlpha = 0.92;
+    ctx.drawImage(tempCanvas, 0, 0);
+    ctx.restore();
+  }
+
+  // Re-draw line art on top for crisp outlines
+  const lineData = ctx.getImageData(0, 0, w, h);
+  for(let i=0;i<n;i++){
+    if(isLine[i]){
+      const o = i * 4;
+      lineData.data[o] = srcData.data[o];
+      lineData.data[o+1] = srcData.data[o+1];
+      lineData.data[o+2] = srcData.data[o+2];
+      lineData.data[o+3] = srcData.data[o+3];
+    }
+  }
+  ctx.putImageData(lineData, 0, 0);
+}
+
 function applyLineArtColoring(paletteColors){
   const w = previewSourceCanvas.width, h = previewSourceCanvas.height;
   previewOutputCanvas.width = w;
@@ -1546,18 +1830,22 @@ applyPaletteBtn.addEventListener('click', ()=>{
   const paletteColors = getSelectedPaletteColors();
   if(!paletteColors){ previewHint.textContent = 'Pick a palette with at least one color first.'; return; }
   if(previewMode === 'lineart') applyLineArtColoring(paletteColors);
+  else if(previewMode === 'smart') applySmartColoring(paletteColors);
   else applyPhotoRecolor(paletteColors);
 });
 
 lineThresholdInput.addEventListener('change', ()=>{
-  if(previewMode !== 'lineart' || !previewSourceCanvas.width) return;
+  if(!previewSourceCanvas.width) return;
+  if(previewMode !== 'lineart' && previewMode !== 'smart') return;
   const paletteColors = getSelectedPaletteColors();
-  if(paletteColors) applyLineArtColoring(paletteColors);
+  if(!paletteColors) return;
+  if(previewMode === 'lineart') applyLineArtColoring(paletteColors);
+  else applySmartColoring(paletteColors);
 });
 
 // ---- Click a filled shape to recolor just that one ----
 previewOutputCanvas.addEventListener('click', e=>{
-  if(previewMode !== 'lineart' || !coloringState) return;
+  if((previewMode !== 'lineart' && previewMode !== 'smart') || !coloringState) return;
   const rect = previewOutputCanvas.getBoundingClientRect();
   const scaleX = previewOutputCanvas.width / rect.width;
   const scaleY = previewOutputCanvas.height / rect.height;
@@ -1571,6 +1859,7 @@ previewOutputCanvas.addEventListener('click', e=>{
 });
 
 function openRegionPicker(clientX, clientY, label){
+  if(!coloringState.regionColor[label] && coloringState.regionColor[label] !== null) return;
   regionPicker.innerHTML = '';
   coloringState.paletteColors.forEach(c=>{
     const btn = document.createElement('button');
@@ -1579,7 +1868,7 @@ function openRegionPicker(clientX, clientY, label){
     btn.title = `${c.c} \u00b7 ${c.n}`;
     btn.addEventListener('click', ()=>{
       coloringState.regionColor[label] = c.h;
-      renderColoring();
+      if(previewMode === 'smart') renderSmartColoring(); else renderColoring();
       regionPicker.hidden = true;
     });
     regionPicker.appendChild(btn);
