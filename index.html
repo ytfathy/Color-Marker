@@ -479,6 +479,59 @@
   .preview-caption-row .preview-caption{margin:0;}
   .preview-pane canvas{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block;background:var(--paper);}
 
+  .mode-toggle{display:flex;gap:8px;margin-bottom:8px;}
+  .mode-btn{
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:7px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .mode-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .mode-btn:hover:not(.active){border-color:var(--teal);color:var(--teal-ink);}
+  .mode-copy{margin-top:0;}
+  .lineart-controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .lineart-controls input[type="range"]{flex:1;max-width:220px;accent-color:var(--teal);}
+  .preview-pane #previewOutputCanvas{cursor:pointer;}
+  .canvas-hint{font-size:11.5px;color:var(--ink-soft);margin:6px 0 0;font-style:italic;}
+
+  .region-picker{
+    position:fixed;
+    display:flex;
+    gap:6px;
+    padding:8px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.18);
+    z-index:30;
+  }
+  .region-picker button{
+    width:26px;height:26px;
+    border-radius:6px;
+    border:1px solid rgba(0,0,0,0.12);
+    cursor:pointer;
+    padding:0;
+  }
+  .region-picker button.blank-btn{
+    background:var(--paper);
+    color:var(--ink-soft);
+    font-size:13px;
+    border:1px dashed var(--line);
+    display:flex;align-items:center;justify-content:center;
+  }
+
   /* browse section */
   .browse{margin-top:56px;}
   .browse h2{
@@ -649,19 +702,29 @@
     </section>
 
     <div class="tool photo-tool">
-      <p class="tool-label">Preview a photo in a palette</p>
-      <p class="tool-copy">Upload a photo, pick a palette, and see it recolored using only those markers — every pixel snaps to its nearest match, the same way the checker above works. Photos are resized a bit for speed, so fine detail softens, but it's enough to judge whether the palette works.</p>
+      <p class="tool-label">Apply a palette to your artwork</p>
+      <p class="tool-copy">Upload an image, pick a palette, and see it filled in using only those markers.</p>
 
-      <div class="drop-zone" id="previewDropZone" tabindex="0" role="button" aria-label="Upload a photo to preview">
+      <div class="mode-toggle" id="previewModeToggle">
+        <button type="button" class="mode-btn active" data-mode="lineart">Coloring page</button>
+        <button type="button" class="mode-btn" data-mode="photo">Photo</button>
+      </div>
+      <p class="tool-copy mode-copy" id="modeCopy">Best for clean line art on a light background — it finds each enclosed shape and fills it with one color from the palette. Click any shape afterward to change just that one.</p>
+
+      <div class="drop-zone" id="previewDropZone" tabindex="0" role="button" aria-label="Upload an image">
         <input type="file" id="previewImageInput" accept="image/*" hidden>
-        <p>Click to choose a photo, or drag one here</p>
+        <p>Click to choose an image, or drag one here</p>
       </div>
 
       <div class="preview-wrap" id="previewWrap" hidden>
         <div class="preview-controls">
           <select id="previewPaletteSelect" class="palette-select"></select>
           <button type="button" class="primary" id="applyPaletteBtn">Apply palette</button>
-          <button type="button" class="remove-btn" id="removePreviewImageBtn">✕ Remove photo</button>
+          <button type="button" class="remove-btn" id="removePreviewImageBtn">✕ Remove image</button>
+        </div>
+        <div class="lineart-controls" id="lineartControls">
+          <label for="lineThreshold">Line sensitivity</label>
+          <input type="range" id="lineThreshold" min="40" max="200" value="110">
         </div>
         <div class="preview-canvases">
           <div class="preview-pane">
@@ -674,10 +737,13 @@
               <button type="button" class="io-btn small" id="downloadPreviewBtn">Download</button>
             </div>
             <canvas id="previewOutputCanvas"></canvas>
+            <p class="canvas-hint" id="canvasHint">Click any shape to change just that one.</p>
           </div>
         </div>
         <p class="picker-hint" id="previewHint"></p>
       </div>
+
+      <div class="region-picker" id="regionPicker" hidden></div>
     </div>
 
     <section class="browse">
@@ -1236,7 +1302,7 @@ importPalettesInput.addEventListener('change', ()=>{
   importPalettesInput.value = '';
 });
 
-// ---- Preview a photo in a palette ----
+// ---- Apply a palette to your artwork ----
 const previewDropZone = document.getElementById('previewDropZone');
 const previewImageInput = document.getElementById('previewImageInput');
 const previewWrap = document.getElementById('previewWrap');
@@ -1250,7 +1316,34 @@ const applyPaletteBtn = document.getElementById('applyPaletteBtn');
 const removePreviewImageBtn = document.getElementById('removePreviewImageBtn');
 const previewHint = document.getElementById('previewHint');
 const downloadPreviewBtn = document.getElementById('downloadPreviewBtn');
+const previewModeToggle = document.getElementById('previewModeToggle');
+const modeCopy = document.getElementById('modeCopy');
+const lineartControls = document.getElementById('lineartControls');
+const lineThresholdInput = document.getElementById('lineThreshold');
+const regionPicker = document.getElementById('regionPicker');
 const PREVIEW_MAX_DIM = 500;
+
+let previewMode = 'lineart';
+let coloringState = null; // {labels, isLine, regionColor, w, h, srcData, paletteColors}
+
+const MODE_COPY = {
+  lineart: 'Best for clean line art on a light background — it finds each enclosed shape and fills it with one color from the palette. Click any shape afterward to change just that one.',
+  photo: 'Best for photos — every pixel snaps to its nearest match in the palette. Fine detail softens a little, but it\u2019s enough to judge whether the palette works.'
+};
+
+previewModeToggle.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    previewModeToggle.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    previewMode = btn.dataset.mode;
+    lineartControls.hidden = previewMode !== 'lineart';
+    modeCopy.textContent = MODE_COPY[previewMode];
+    previewOutputPane.hidden = true;
+    coloringState = null;
+    regionPicker.hidden = true;
+  });
+});
+lineartControls.hidden = previewMode !== 'lineart';
 
 function refreshPaletteSelect(){
   const previous = previewPaletteSelect.value;
@@ -1270,6 +1363,15 @@ function refreshPaletteSelect(){
   }
 }
 refreshPaletteSelect();
+
+function getSelectedPaletteColors(){
+  const key = previewPaletteSelect.value;
+  if(key === '__all__') return COLORS;
+  const sp = savedPalettes.find(p=>p.name === key);
+  if(!sp) return null;
+  const cols = sp.colors.map(h=>colorFor(h)).filter(Boolean);
+  return cols.length ? cols : null;
+}
 
 previewDropZone.addEventListener('click', ()=>previewImageInput.click());
 previewDropZone.addEventListener('keydown', e=>{
@@ -1301,6 +1403,8 @@ function loadPreviewImage(file){
       previewDropZone.hidden = true;
       previewWrap.hidden = false;
       previewOutputPane.hidden = true;
+      coloringState = null;
+      regionPicker.hidden = true;
       refreshPaletteSelect();
       previewHint.textContent = 'Pick a palette above, then hit Apply palette.';
     };
@@ -1315,6 +1419,8 @@ removePreviewImageBtn.addEventListener('click', ()=>{
   previewOutputPane.hidden = true;
   previewImageInput.value = '';
   previewHint.textContent = '';
+  coloringState = null;
+  regionPicker.hidden = true;
 });
 
 function labFromRgb(r,g,b){
@@ -1331,18 +1437,8 @@ function nearestInPalette(r,g,b,paletteColors){
   return best;
 }
 
-applyPaletteBtn.addEventListener('click', ()=>{
-  const key = previewPaletteSelect.value;
-  let paletteColors;
-  if(key === '__all__'){
-    paletteColors = COLORS;
-  } else {
-    const sp = savedPalettes.find(p=>p.name === key);
-    if(!sp){ previewHint.textContent = 'Pick a palette first.'; return; }
-    paletteColors = sp.colors.map(h=>colorFor(h)).filter(Boolean);
-    if(paletteColors.length === 0){ previewHint.textContent = 'That palette has no colors in it.'; return; }
-  }
-
+// ---- Photo mode: recolor every pixel to its nearest palette match ----
+function applyPhotoRecolor(paletteColors){
   const w = previewSourceCanvas.width, h = previewSourceCanvas.height;
   previewOutputCanvas.width = w;
   previewOutputCanvas.height = h;
@@ -1365,6 +1461,151 @@ applyPaletteBtn.addEventListener('click', ()=>{
   previewOutputCtx.putImageData(outData, 0, 0);
   previewOutputPane.hidden = false;
   previewHint.textContent = `Recolored using ${paletteColors.length} marker${paletteColors.length===1?'':'s'}.`;
+}
+
+// ---- Coloring-page mode: find enclosed shapes, fill each with one palette color ----
+function labelRegions(imageData, w, h, threshold){
+  const data = imageData.data;
+  const n = w*h;
+  const isLine = new Uint8Array(n);
+  for(let i=0;i<n;i++){
+    const o = i*4;
+    const r=data[o], g=data[o+1], b=data[o+2], a=data[o+3];
+    const lum = 0.299*r + 0.587*g + 0.114*b;
+    isLine[i] = (a < 10 || lum < threshold) ? 1 : 0;
+  }
+  const labels = new Int32Array(n).fill(-1);
+  const regions = [];
+  const stack = new Int32Array(n);
+  for(let start=0; start<n; start++){
+    if(isLine[start] || labels[start] !== -1) continue;
+    let sp = 0;
+    const id = regions.length;
+    stack[sp++] = start;
+    labels[start] = id;
+    let count = 0;
+    while(sp > 0){
+      const idx = stack[--sp];
+      count++;
+      const x = idx % w, y = (idx / w) | 0;
+      if(x>0){ const ni=idx-1; if(!isLine[ni] && labels[ni]===-1){ labels[ni]=id; stack[sp++]=ni; } }
+      if(x<w-1){ const ni=idx+1; if(!isLine[ni] && labels[ni]===-1){ labels[ni]=id; stack[sp++]=ni; } }
+      if(y>0){ const ni=idx-w; if(!isLine[ni] && labels[ni]===-1){ labels[ni]=id; stack[sp++]=ni; } }
+      if(y<h-1){ const ni=idx+w; if(!isLine[ni] && labels[ni]===-1){ labels[ni]=id; stack[sp++]=ni; } }
+    }
+    regions.push({ id, count });
+  }
+  return { labels, regions, isLine };
+}
+
+function renderColoring(){
+  const { labels, isLine, regionColor, w, h, srcData } = coloringState;
+  const outData = previewOutputCtx.createImageData(w, h);
+  const src = srcData.data, out = outData.data;
+  const n = w*h;
+  for(let i=0;i<n;i++){
+    const o = i*4;
+    if(isLine[i]){
+      out[o]=src[o]; out[o+1]=src[o+1]; out[o+2]=src[o+2]; out[o+3]=src[o+3];
+    } else {
+      const hex = regionColor[labels[i]];
+      if(hex){
+        const c = hexToRgb(hex);
+        out[o]=c.r; out[o+1]=c.g; out[o+2]=c.b; out[o+3]=255;
+      } else {
+        out[o]=src[o]; out[o+1]=src[o+1]; out[o+2]=src[o+2]; out[o+3]=src[o+3];
+      }
+    }
+  }
+  previewOutputCtx.putImageData(outData, 0, 0);
+}
+
+function applyLineArtColoring(paletteColors){
+  const w = previewSourceCanvas.width, h = previewSourceCanvas.height;
+  previewOutputCanvas.width = w;
+  previewOutputCanvas.height = h;
+  const srcData = previewSourceCtx.getImageData(0, 0, w, h);
+  const threshold = parseInt(lineThresholdInput.value, 10);
+
+  const { labels, regions, isLine } = labelRegions(srcData, w, h, threshold);
+  const MIN_REGION_PIXELS = Math.max(12, Math.round(w * h * 0.0008));
+  const significant = regions.filter(r=>r.count >= MIN_REGION_PIXELS);
+  significant.sort((a,b)=>b.count-a.count);
+  const regionColor = new Array(regions.length).fill(null);
+  significant.forEach((r,i)=>{ regionColor[r.id] = paletteColors[i % paletteColors.length].h; });
+
+  coloringState = { labels, isLine, regionColor, w, h, srcData, paletteColors };
+  renderColoring();
+  previewOutputPane.hidden = false;
+  previewHint.textContent = significant.length
+    ? `Filled ${significant.length} shape${significant.length===1?'':'s'} using ${paletteColors.length} color${paletteColors.length===1?'':'s'}. This is a starting point — click any shape to change it.`
+    : "Couldn't find any enclosed shapes to fill — try lowering the line sensitivity, or check the image has clear dark outlines.";
+}
+
+applyPaletteBtn.addEventListener('click', ()=>{
+  const paletteColors = getSelectedPaletteColors();
+  if(!paletteColors){ previewHint.textContent = 'Pick a palette with at least one color first.'; return; }
+  if(previewMode === 'lineart') applyLineArtColoring(paletteColors);
+  else applyPhotoRecolor(paletteColors);
+});
+
+lineThresholdInput.addEventListener('change', ()=>{
+  if(previewMode !== 'lineart' || !previewSourceCanvas.width) return;
+  const paletteColors = getSelectedPaletteColors();
+  if(paletteColors) applyLineArtColoring(paletteColors);
+});
+
+// ---- Click a filled shape to recolor just that one ----
+previewOutputCanvas.addEventListener('click', e=>{
+  if(previewMode !== 'lineart' || !coloringState) return;
+  const rect = previewOutputCanvas.getBoundingClientRect();
+  const scaleX = previewOutputCanvas.width / rect.width;
+  const scaleY = previewOutputCanvas.height / rect.height;
+  const x = Math.floor((e.clientX - rect.left) * scaleX);
+  const y = Math.floor((e.clientY - rect.top) * scaleY);
+  const idx = y * coloringState.w + x;
+  if(idx < 0 || idx >= coloringState.isLine.length || coloringState.isLine[idx]) return;
+  const label = coloringState.labels[idx];
+  if(label === -1) return;
+  openRegionPicker(e.clientX, e.clientY, label);
+});
+
+function openRegionPicker(clientX, clientY, label){
+  regionPicker.innerHTML = '';
+  coloringState.paletteColors.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.style.background = c.h;
+    btn.title = `${c.c} \u00b7 ${c.n}`;
+    btn.addEventListener('click', ()=>{
+      coloringState.regionColor[label] = c.h;
+      renderColoring();
+      regionPicker.hidden = true;
+    });
+    regionPicker.appendChild(btn);
+  });
+  const blankBtn = document.createElement('button');
+  blankBtn.type = 'button';
+  blankBtn.className = 'blank-btn';
+  blankBtn.textContent = '\u2715';
+  blankBtn.title = 'Leave unfilled';
+  blankBtn.addEventListener('click', ()=>{
+    coloringState.regionColor[label] = null;
+    renderColoring();
+    regionPicker.hidden = true;
+  });
+  regionPicker.appendChild(blankBtn);
+
+  regionPicker.style.left = Math.max(8, clientX - 70) + 'px';
+  regionPicker.style.top = (clientY + 16) + 'px';
+  regionPicker.hidden = false;
+}
+
+document.addEventListener('click', e=>{
+  if(regionPicker.hidden) return;
+  if(!regionPicker.contains(e.target) && e.target !== previewOutputCanvas){
+    regionPicker.hidden = true;
+  }
 });
 
 downloadPreviewBtn.addEventListener('click', ()=>{
