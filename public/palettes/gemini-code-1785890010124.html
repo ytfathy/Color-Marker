@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ohuhu Honolulu B 320 Set - 120 Colors Reference</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #fff; color: #333; }
+  h1 { text-align: center; margin-bottom: 5px; }
+  p.subtitle { text-align: center; font-size: 14px; color: #666; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: 8px; text-align: center; background: #fafafa; font-size: 11px; }
+  .swatch { width: 100%; height: 32px; border-radius: 4px; margin-bottom: 6px; border: 1px solid rgba(0,0,0,0.1); }
+  .code { font-weight: bold; font-size: 13px; margin-bottom: 2px; }
+  .name { color: #555; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .hex { font-family: monospace; color: #888; font-size: 10px; margin-top: 2px; }
+  @media print {
+    body { margin: 0; }
+    .card { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+  <h1>Ohuhu Honolulu B 320 Series</h1>
+  <p class="subtitle">120 Colors Swatch Sheet & Hex Reference Guide</p>
+  <div class="grid" id="swatchGrid"></div>
+
+<script>
+const colors = [
+  {code:"Y00", name:"Lemon Mist", hex:"#FFFDE0"}, {code:"Y02", name:"Lemon Chiffon", hex:"#FFF7A5"},
+  {code:"Y03", name:"Pastel Yellow", hex:"#FFEE75"}, {code:"Y06", name:"Butter", hex:"#FDE36A"},
+  {code:"Y07", name:"Banana Cream", hex:"#FCDA52"}, {code:"Y09", name:"Summer Lemon", hex:"#FFD800"},
+  {code:"Y14", name:"Pale Lemon Yellow", hex:"#F4EC6B"}, {code:"Y17", name:"Bright Lemon Yellow", hex:"#E1E000"},
+  {code:"Y19", name:"Canary", hex:"#FFD700"}, {code:"Y111", name:"Mustard", hex:"#DDB23B"},
+  {code:"Y26", name:"Light Gold", hex:"#E7BA50"}, {code:"Y27", name:"Sunflower", hex:"#FFB700"},
+  {code:"Y28", name:"Corn Yellow", hex:"#F1A80A"}, {code:"Y29", name:"Melon Yellow", hex:"#FFA500"},
+  {code:"Y213", name:"Dark Marigold", hex:"#E67E22"}, {code:"Y215", name:"Toffee", hex:"#C38634"},
+  {code:"Y216", name:"Caramel", hex:"#B36B22"}, {code:"Y34", name:"Eggnog Yellow", hex:"#F6D7A7"},
+  {code:"Y39", name:"Straw", hex:"#EBD292"}, {code:"Y311", name:"Termite Beige", hex:"#CBB17D"},
+  {code:"Y315", name:"Olive Yellow", hex:"#A19932"}, {code:"Y42", name:"Warm Ivory", hex:"#FAF0DB"},
+  {code:"Y45", name:"Cream", hex:"#FBE7C6"}, {code:"Y46", name:"Peach Yogurt", hex:"#FCD2AD"},
+  {code:"Y49", name:"Autumn Leaf", hex:"#D28138"}, {code:"Y410", name:"Goldenrod", hex:"#DAA520"},
+  {code:"Y412", name:"Apple Cider", hex:"#B8860B"}, {code:"Y413", name:"Fawn", hex:"#A67B5B"},
+  {code:"Y415", name:"Sand Storm", hex:"#C29B38"}, {code:"Y416", name:"Golden Brown", hex:"#966F33"},
+  {code:"Y55", name:"Golden Champagne", hex:"#E3CE99"}, {code:"Y59", name:"Marigold Yellow", hex:"#FCAE1E"},
+  {code:"Y515", name:"Light Walnut", hex:"#8C6239"}, {code:"Y62", name:"Sandy Beige", hex:"#E5C3A6"},
+  {code:"Y69", name:"Milk Tea", hex:"#D8B48F"}, {code:"Y611", name:"Dark Sand", hex:"#B8936D"},
+  {code:"YR00", name:"Barely Blush", hex:"#FFF0EC"}, {code:"YR03", name:"Pastel Blush", hex:"#FFE2D6"},
+  {code:"YR04", name:"Pastel Peach", hex:"#FFCCA7"}, {code:"YR06", name:"Raw Cashew", hex:"#DFB796"},
+  {code:"YR07", name:"Salmon Orange", hex:"#FF8C66"}, {code:"YR015", name:"Burnt Orange", hex:"#CC5500"},
+  {code:"YR11", name:"Peachy Blush", hex:"#F8C3B3"}, {code:"YR17", name:"Sunset Orange", hex:"#FF5E36"},
+  {code:"YR19", name:"Marigold Orange", hex:"#F28C28"}, {code:"YR111", name:"Persimmon", hex:"#EC5800"},
+  {code:"YR112", name:"Orange", hex:"#FF6600"}, {code:"YR213", name:"Squash Orange", hex:"#E66100"},
+  {code:"YR215", name:"Aged Cherry Wood", hex:"#8B3A2B"}, {code:"YR33", name:"Rose Cream", hex:"#F7D6CF"},
+  {code:"YR34", name:"Peach Cream", hex:"#FCE0D2"}, {code:"YR39", name:"Cinnamon", hex:"#7B3F00"},
+  {code:"YR312", name:"Light Earth Brown", hex:"#926239"}, {code:"YR313", name:"Potato Brown", hex:"#7D4F28"},
+  {code:"YR314", name:"Sandalwood", hex:"#A37452"}, {code:"YR43", name:"Pale Cherry Pink", hex:"#F6C8CF"},
+  {code:"YR45", name:"Rosewater", hex:"#E8ADB5"}, {code:"YR47", name:"Dusty Peach", hex:"#D99B82"},
+  {code:"YR52", name:"Cameo Rose", hex:"#D4A3A8"}, {code:"YR55", name:"Pink Lemonade", hex:"#EEA7B3"},
+  {code:"YR57", name:"Tropical Peach", hex:"#FFB199"}, {code:"YR58", name:"Pink Sand", hex:"#E3B4A3"},
+  {code:"YR59", name:"Cantaloupe", hex:"#FFA07A"}, {code:"YR511", name:"Pale Coral", hex:"#F88379"},
+  {code:"YR513", name:"Papaya", hex:"#EFA98D"}, {code:"YR515", name:"Burnt Sienna", hex:"#E97451"},
+  {code:"E05", name:"Pale Moss", hex:"#A9B388"}, {code:"E06", name:"Bog Mist Green", hex:"#839073"},
+  {code:"E011", name:"Pale Camo Green", hex:"#9E9D7C"}, {code:"E14", name:"Khaki Beige", hex:"#C3B091"},
+  {code:"E17", name:"Sage Grey", hex:"#939D94"}, {code:"E19", name:"Dried Sage", hex:"#7A8B7B"},
+  {code:"E22", name:"Lime Juice", hex:"#C0D860"}, {code:"E26", name:"Pale Celery", hex:"#B8C088"},
+  {code:"E211", name:"Light Elm Wood", hex:"#8A7B66"}, {code:"E212", name:"Dusty Olive", hex:"#555D50"},
+  {code:"E311", name:"Sandver Brown", hex:"#705335"}, {code:"E313", name:"Swamp Mud", hex:"#4D4333"},
+  {code:"E314", name:"Military Olive", hex:"#4B5320"}, {code:"E44", name:"Soft Sand", hex:"#D8C3B0"},
+  {code:"E46", name:"Coral Sand", hex:"#EA8973"}, {code:"E413", name:"Dark Brown", hex:"#5C4033"},
+  {code:"E415", name:"Cedar Brown", hex:"#4A2E1B"}, {code:"E58", name:"Fawn Brown", hex:"#78523A"},
+  {code:"E511", name:"Chocolate Mocha", hex:"#432818"}, {code:"E515", name:"Black Brown", hex:"#2B1810"},
+  {code:"E69", name:"Russet Brown", hex:"#80461B"}, {code:"E610", name:"Light Mahogany", hex:"#682820"},
+  {code:"E614", name:"Maple Syrup", hex:"#59260B"}, {code:"E713", name:"Red Bean", hex:"#5C2C35"},
+  {code:"E85", name:"Cherry Taupe", hex:"#725656"}, {code:"E92", name:"Ash Rose", hex:"#B58A8A"},
+  {code:"E97", name:"Deep Rose Grey", hex:"#806060"}, {code:"E914", name:"Bark Brown", hex:"#423131"},
+  {code:"R012", name:"Fruit Punch", hex:"#FF4057"}, {code:"R013", name:"Tomato", hex:"#FF6347"},
+  {code:"R014", name:"Deep Vermilion", hex:"#D9381E"}, {code:"R015", name:"Crimson", hex:"#DC143C"},
+  {code:"R016", name:"Chili Red", hex:"#C21807"}, {code:"R15", name:"Lychee Juice", hex:"#990000"},
+  {code:"R16", name:"Light Salmon", hex:"#FFA07A"}, {code:"R112", name:"Reddish Pink", hex:"#FF69B4"},
+  {code:"R22", name:"Ballet Pink", hex:"#F6C4C7"}, {code:"R23", name:"Sakura", hex:"#FFB7C5"},
+  {code:"R25", name:"Tender Pink", hex:"#F8AFA6"}, {code:"R26", name:"Valentine Pink", hex:"#E6676B"},
+  {code:"R27", name:"Pink Satin", hex:"#E07A5F"}, {code:"R28", name:"Pink Carnation", hex:"#FF7B9C"},
+  {code:"R210", name:"Deep Blush", hex:"#D1526D"}, {code:"R211", name:"Ruby", hex:"#9B111E"},
+  {code:"R212", name:"Mulberry", hex:"#8B004B"}, {code:"R213", name:"Pomegranate", hex:"#660B21"},
+  {code:"R215", name:"Morello Cherry", hex:"#4A001F"}, {code:"R38", name:"Rose Pink", hex:"#FF66CC"},
+  {code:"R310", name:"Purplish Pink", hex:"#E066FF"}, {code:"R312", name:"Magenta", hex:"#FF00FF"},
+  {code:"R46", name:"Old Rose", hex:"#C08081"}, {code:"R48", name:"Cherry Rose", hex:"#B24968"},
+  {code:"R410", name:"Raspberry", hex:"#872657"}, {code:"R412", name:"Cerise", hex:"#DE3163"}
+];
+
+const container = document.getElementById('swatchGrid');
+colors.forEach(item => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="swatch" style="background-color: ${item.hex}"></div>
+    <div class="code">${item.code}</div>
+    <div class="name">${item.name}</div>
+    <div class="hex">${item.hex}</div>
+  `;
+  container.appendChild(card);
+});
+</script>
+</body>
+</html>
